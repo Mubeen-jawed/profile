@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String      @id @default(cuid())
+  email         String      @unique
+  username      String      @unique
+  password      String      @default("")
+  googleId      String?     @unique
+  avatarUrl     String?
+  role          String      @default("user") // "user", "admin"
+  isPaid        Boolean     @default(false)
+  searchCredits Int         @default(10)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  searchLogs    SearchLog[]
+
+  @@index([createdAt])
+  @@index([isPaid])
+  @@index([role])
+}
+
+model SearchLog {
+  id               String   @id @default(cuid())
+  userId           String?
+  sessionId        String?
+  searchedUsername  String
+  postCount        Int      @default(0)
+  commentCount     Int      @default(0)
+  createdAt        DateTime @default(now())
+  user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([searchedUsername])
+  @@index([createdAt])
+  @@index([sessionId])
+}
+
+model AnonCredit {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique
+  creditsUsed Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SearchCache {
+  id               String   @id @default(cuid())
+  searchedUsername  String   @unique
+  postsJson        String
+  commentsJson     String
+  postCount        Int
+  commentCount     Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([updatedAt])
+}
+
+model NsfwCheck {
+  id               String   @id @default(cuid())
+  userId           String?
+  sessionId        String?
+  checkedUsername  String
+  isNsfw           Boolean  @default(false)
+  found            Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  @@index([userId])
+  @@index([checkedUsername])
+  @@index([createdAt])
+}

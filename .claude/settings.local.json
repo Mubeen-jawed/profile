@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\jawed\\\\Downloads\\\\redditprofile-main\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(grep -E \"\\\\.\\(json|ts|js|py\\)$\")",
+      "Bash(Get-Service -Name postgresql*)",
+      "Bash(pg_isready -h localhost -p 5432)",
+      "Bash(npx prisma *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\jawed\\\\Downloads\\\\redditprofile-main\" -Recurse -File)",
+      "Bash(Sort-Object FullName)",
+      "Bash(dir \"C:\\\\Users\\\\jawed\\\\Downloads\\\\Stalker\" /s /b)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\jawed\\\\Downloads\\\\redditprofile-main\" -Recurse -Include *.css,*.scss)",
+      "Bash(dir C:\\\\Users\\\\jawed\\\\Downloads\\\\redditprofile-main\\\\src\\\\app /s /b)",
+      "Bash(findstr /i \"\\\\.tsx\\\\|\\\\.ts\\\\|\\\\.jsx\\\\|\\\\.js\")",
+      "Bash(curl -s http://localhost:3000/)"
+    ]
+  }
+}

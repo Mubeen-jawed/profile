@@ -128,14 +128,23 @@ export async function GET(request: NextRequest) {
       });
     }
   } else {
-    // Anonymous user, track by session cookie
+    // Anonymous user — track by both session cookie AND IP address.
+    // This prevents bypassing the free limit via incognito or a different browser.
     const sessionId = await getOrCreateSessionId();
-    const anonRecord = await prisma.anonCredit.findUnique({
-      where: { sessionId },
-    });
-    const used = anonRecord?.creditsUsed ?? 0;
     const ANON_LIMIT = 1;
-    if (used >= ANON_LIMIT) {
+
+    const [anonRecord, anonIpRecord] = await Promise.all([
+      prisma.anonCredit.findUnique({ where: { sessionId } }),
+      ip !== "unknown"
+        ? prisma.anonCredit.findFirst({
+            where: { ipAddress: ip, creditsUsed: { gte: ANON_LIMIT } },
+          })
+        : Promise.resolve(null),
+    ]);
+
+    const used = anonRecord?.creditsUsed ?? 0;
+
+    if (used >= ANON_LIMIT || anonIpRecord) {
       return NextResponse.json(
         {
           error: "Free search used up. Sign up for 10 free credits!",
@@ -144,14 +153,25 @@ export async function GET(request: NextRequest) {
         { status: 403 },
       );
     }
+
     if (anonRecord) {
       await prisma.anonCredit.update({
         where: { sessionId },
-        data: { creditsUsed: { increment: 1 } },
+        data: {
+          creditsUsed: { increment: 1 },
+          // backfill IP if it was missing (e.g. record created before this change)
+          ...(anonRecord.ipAddress == null && ip !== "unknown"
+            ? { ipAddress: ip }
+            : {}),
+        },
       });
     } else {
       await prisma.anonCredit.create({
-        data: { sessionId, creditsUsed: 1 },
+        data: {
+          sessionId,
+          creditsUsed: 1,
+          ipAddress: ip !== "unknown" ? ip : null,
+        },
       });
     }
     creditsRemaining = ANON_LIMIT - used - 1;

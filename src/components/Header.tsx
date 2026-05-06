@@ -82,16 +82,16 @@ export default function Header() {
       <header className={scrolled ? "nav-scrolled" : ""}>
         <a href="/" className="logo">
           <Image
-            src="/avatar-removebg.png"
+            src="/logo.png"
             alt="redditprofile"
-            width={33}
-            height={33}
+            width={200}
+            height={200}
             className="logo-img"
             priority
           />
-          <span className="logo-wordmark">
+          {/* <span className="logo-wordmark">
             Reddit<span style={{ color: "var(--red)" }}>Profile</span>
-          </span>
+          </span> */}
         </a>
 
         <nav className="nav-links" aria-label="Main">

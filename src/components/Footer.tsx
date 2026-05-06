@@ -15,15 +15,12 @@ export default function Footer() {
         <div className="footer-brand">
           <a href="/" className="logo footer-logo">
             <Image
-              src="/avatar-removebg.png"
+              src="/logo.png"
               alt="redditprofile"
-              width={30}
-              height={30}
+              width={200}
+              height={200}
               className="logo-img"
             />
-            <span className="logo-wordmark">
-              Reddit<span style={{ color: "var(--red)" }}>Profile</span>
-            </span>
           </a>
           <p className="footer-tagline">
             Instant intelligence on any Reddit user

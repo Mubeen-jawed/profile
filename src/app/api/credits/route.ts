@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 
-export async function GET() {
+const ANON_LIMIT = 1;
+
+export async function GET(request: NextRequest) {
   const session = await getSession();
 
   if (session) {
@@ -19,18 +21,29 @@ export async function GET() {
     });
   }
 
-  // Anonymous
+  // Anonymous — check both session cookie and IP
+  const ip =
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-real-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "unknown";
+
   const cookieStore = await cookies();
   const sid = cookieStore.get("ttp_anon_sid")?.value;
-  if (!sid) {
-    return NextResponse.json({ credits: 1, isLoggedIn: false, isPaid: false });
-  }
 
-  const anon = await prisma.anonCredit.findUnique({ where: { sessionId: sid } });
-  const used = anon?.creditsUsed ?? 0;
-  return NextResponse.json({
-    credits: Math.max(0, 1 - used),
-    isLoggedIn: false,
-    isPaid: false,
-  });
+  const [anonBySid, anonByIp] = await Promise.all([
+    sid ? prisma.anonCredit.findUnique({ where: { sessionId: sid } }) : Promise.resolve(null),
+    ip !== "unknown"
+      ? prisma.anonCredit.findFirst({
+          where: { ipAddress: ip, creditsUsed: { gte: ANON_LIMIT } },
+        })
+      : Promise.resolve(null),
+  ]);
+
+  const usedBySession = anonBySid?.creditsUsed ?? 0;
+  const blockedByIp = anonByIp != null;
+
+  const credits = blockedByIp || usedBySession >= ANON_LIMIT ? 0 : ANON_LIMIT - usedBySession;
+
+  return NextResponse.json({ credits, isLoggedIn: false, isPaid: false });
 }

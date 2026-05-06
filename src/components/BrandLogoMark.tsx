@@ -12,7 +12,7 @@ export default function BrandLogoMark({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       <Image
-        src="/avatar-removebg.png"
+        src="/logo.png"
         alt="redditprofile logo"
         fill
         sizes="(max-width: 768px) 24px, 32px"

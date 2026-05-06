@@ -48,9 +48,12 @@ model SearchLog {
 model AnonCredit {
   id          String   @id @default(cuid())
   sessionId   String   @unique
+  ipAddress   String?
   creditsUsed Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([ipAddress])
 }
 
 model SearchCache {

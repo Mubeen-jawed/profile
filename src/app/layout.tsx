@@ -18,8 +18,11 @@ export const metadata: Metadata = {
     "Instantly surface posts, comments, karma, and activity patterns for any Reddit user. Complete public profile analysis in seconds.",
   metadataBase: new URL(process.env.APP_URL || "https://redditprofile.com"),
   icons: {
-    icon: [{ url: "/logo.png", type: "image/png" }],
-    shortcut: ["/logo.png"],
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png" },
+    ],
+    shortcut: ["/favicon.ico"],
     apple: ["/logo.png"],
   },
   openGraph: {

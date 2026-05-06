@@ -13,7 +13,8 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\jawed\\\\Downloads\\\\redditprofile-main\" -Recurse -Include *.css,*.scss)",
       "Bash(dir C:\\\\Users\\\\jawed\\\\Downloads\\\\redditprofile-main\\\\src\\\\app /s /b)",
       "Bash(findstr /i \"\\\\.tsx\\\\|\\\\.ts\\\\|\\\\.jsx\\\\|\\\\.js\")",
-      "Bash(curl -s http://localhost:3000/)"
+      "Bash(curl -s http://localhost:3000/)",
+      "PowerShell(Copy-Item *)"
     ]
   }
 }

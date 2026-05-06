@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function Footer() {
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -12,6 +14,13 @@ export default function Footer() {
       <div className="footer-inner">
         <div className="footer-brand">
           <a href="/" className="logo footer-logo">
+            <Image
+              src="/avatar-removebg.png"
+              alt="redditprofile"
+              width={30}
+              height={30}
+              className="logo-img"
+            />
             <span className="logo-wordmark">
               Reddit<span style={{ color: "var(--red)" }}>Profile</span>
             </span>

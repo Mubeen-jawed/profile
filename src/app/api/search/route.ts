@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
   // Short-circuit before credit logic so blocked lookups don't burn credits.
   if (isBlockedUsername(sanitized)) {
     return NextResponse.json(
-      { error: "Why are you trying to stalk the admin, huh?", blocked: true },
+      { error: "bad bad, dont search for admin good human", blocked: true },
       { status: 403 },
     );
   }

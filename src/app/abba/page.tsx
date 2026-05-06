@@ -682,7 +682,7 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <Link
-                            href={`/admin/users/${user.id}`}
+                            href={`/abba/users/${user.id}`}
                             className="text-sm font-medium text-foreground hover:text-green-accent"
                           >
                             {user.username}
@@ -726,7 +726,7 @@ export default function AdminDashboard() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <Link
-                          href={`/admin/users/${user.id}`}
+                          href={`/abba/users/${user.id}`}
                           className="rounded bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-400 transition-colors hover:bg-blue-500/20"
                           title="Open user profile to send email or view history"
                         >
@@ -781,7 +781,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <Link
-                      href={`/admin/users/${user.id}`}
+                      href={`/abba/users/${user.id}`}
                       className="block truncate text-sm font-medium text-foreground hover:text-green-accent"
                     >
                       {user.username}
@@ -817,7 +817,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   <Link
-                    href={`/admin/users/${user.id}`}
+                    href={`/abba/users/${user.id}`}
                     className="rounded bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-400"
                   >
                     Email

@@ -71,7 +71,7 @@ export default function AdminUserDetail() {
         sp.set("limit", String(SEARCH_LOG_PER_PAGE));
         const res = await fetch(`/api/admin/users/${userId}?${sp}`);
         if (res.status === 403) {
-          router.push("/admin");
+          router.push("/abba");
           return;
         }
         if (!res.ok) {
@@ -195,7 +195,7 @@ export default function AdminUserDetail() {
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
       <Link
-        href="/admin"
+        href="/abba"
         className="mb-6 inline-flex items-center gap-1 text-sm text-zinc-400 hover:text-green-accent"
       >
         <svg

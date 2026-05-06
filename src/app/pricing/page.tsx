@@ -19,6 +19,15 @@ export default function PricingPage() {
         </p>
       </div>
 
+      <div className="mb-8 flex justify-center">
+        <div className="promo-banner">
+          <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          One-time payment &amp; lifetime access — first 30 users only
+        </div>
+      </div>
+
       <div className="mx-auto grid max-w-2xl gap-6 sm:grid-cols-2">
         {/* Free Plan */}
         <div className="rounded-xl border border-card-border bg-card-bg p-6">
@@ -31,7 +40,6 @@ export default function PricingPage() {
               "1 search without an account",
               "10 searches with a free account",
               "Preview of first 10 results per search",
-              "CSV export included",
             ].map((f) => (
               <li
                 key={f}

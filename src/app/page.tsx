@@ -22,6 +22,23 @@ export default function Home() {
         </p>
 
         <LandingSearchForm />
+
+        <div className="promo-banner mt-6">
+          <svg
+            className="h-3.5 w-3.5 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          lifetime access, for the first 30 users only
+        </div>
       </section>
 
       {/* ── Features ── */}
@@ -279,13 +296,12 @@ export default function Home() {
             <ul className="price-features">
               {[
                 { text: "Full Reddit profile data", on: true },
-                { text: "All 4 karma types visualised", on: true },
-                { text: "Last 6 recent posts", on: true },
-                { text: "Up to 10 web mentions", on: true },
+                { text: "Last 7 recent posts and comments", on: true },
                 { text: "Shareable search links", on: true },
-                { text: "Unlimited web mentions", on: false },
-                { text: "CSV export", on: false },
-                { text: "Search history", on: false },
+                { text: "10 Credits for free", on: true },
+                { text: "Search history", on: true },
+                { text: "CSV Export", on: false },
+                { text: "Unlimited Credits", on: false },
               ].map((f) => (
                 <li
                   key={f.text}
@@ -347,13 +363,11 @@ export default function Home() {
             <ul className="price-features">
               {[
                 "Everything in Free",
-                "Unlimited web mentions",
+                "Unlimited search credits",
+                "All posts and comments",
                 "CSV export",
-                "Search history",
-                "Bulk username lookup",
                 "Early access to new features",
                 "Priority support",
-                "API access (coming soon)",
               ].map((f) => (
                 <li key={f} className="price-line">
                   <span className="price-check" aria-hidden="true">
@@ -374,7 +388,7 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <button className="price-cta price-cta-pro" disabled>
+            <a href="/api/checkout" className="price-cta price-cta-pro">
               <svg
                 width="13"
                 height="13"
@@ -386,11 +400,10 @@ export default function Home() {
                 strokeLinejoin="round"
                 aria-hidden="true"
               >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>{" "}
-              Launching Soon
-            </button>
+              Get Lifetime Pro Access
+            </a>
             <p className="price-guarantee">
               <svg
                 width="12"

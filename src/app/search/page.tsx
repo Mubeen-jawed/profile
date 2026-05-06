@@ -520,25 +520,27 @@ function SearchContent() {
                   {results.commentCount !== 1 ? "s" : ""}
                 </p>
               </div>
-              <button
-                onClick={() => exportToCSV(results)}
-                className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-card-border bg-card-bg px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:border-green-accent/30 hover:text-green-accent sm:w-auto"
-              >
-                <svg
-                  className="h-3.5 w-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+              {canSeeAll && (
+                <button
+                  onClick={() => exportToCSV(results)}
+                  className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-card-border bg-card-bg px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:border-green-accent/30 hover:text-green-accent sm:w-auto"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                Export CSV
-              </button>
+                  <svg
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  Export CSV
+                </button>
+              )}
             </div>
 
             {/* Tabs */}

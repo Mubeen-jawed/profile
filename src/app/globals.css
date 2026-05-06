@@ -206,7 +206,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 40px;
   gap: 8px;
   background: rgba(7, 7, 7, 0.92);
   border: 1px solid transparent;
@@ -238,7 +238,7 @@ header.nav-scrolled {
   border-color: var(--border2);
   background: rgba(12, 12, 12, 0.97);
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
-  padding: 0 20px;
+  padding: 0 28px;
   transition:
     top 240ms var(--ease),
     left 240ms var(--ease),
@@ -251,6 +251,34 @@ header.nav-scrolled {
     padding 240ms var(--ease);
 }
 
+/* ── PROMO BANNER ── */
+@keyframes promo-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+.promo-banner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 16px 6px 12px;
+  background: linear-gradient(135deg, var(--red) 0%, var(--red2) 100%);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  /* droplet shape: three round corners, one sharp */
+  border-radius: 100px 100px 100px 6px;
+  isolation: isolate;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
 /* ── LOGO ── */
 .logo {
   display: flex;
@@ -260,15 +288,15 @@ header.nav-scrolled {
   flex-shrink: 0;
 }
 .logo-img {
-  width: 30px;
-  height: 30px;
+  width: 33px;
+  height: 33px;
   flex-shrink: 0;
   border-radius: 7px;
   filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.28));
   object-fit: contain;
 }
 .logo-wordmark {
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 800;
   color: var(--foreground);
   letter-spacing: -0.025em;
@@ -420,7 +448,7 @@ header.nav-scrolled {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  min-width: 220px;
+  min-width: 260px;
   background: var(--s2);
   border: 1px solid var(--border2);
   border-radius: 14px;
@@ -428,11 +456,33 @@ header.nav-scrolled {
     0 16px 48px rgba(0, 0, 0, 0.65),
     0 0 0 1px rgba(255, 255, 255, 0.03);
   overflow: hidden;
-  animation: fadeUp 140ms var(--ease) both;
   z-index: 200;
 }
+
+/* User identity row */
 .nav-dropdown-user {
   padding: 14px 16px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-dropdown-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--red), var(--red2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.nav-dropdown-user-info {
+  flex: 1;
+  min-width: 0;
 }
 .nav-dropdown-name {
   font-size: 13.5px;
@@ -444,17 +494,126 @@ header.nav-scrolled {
   text-overflow: ellipsis;
 }
 .nav-dropdown-email {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--t3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: ui-monospace, "SF Mono", monospace;
 }
+.nav-dropdown-credits {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  background: var(--s3);
+  border: 1px solid var(--border2);
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--t2);
+  white-space: nowrap;
+}
+.nav-dropdown-credits-pro {
+  background: rgba(255, 69, 0, 0.08);
+  border-color: rgba(255, 69, 0, 0.28);
+  color: var(--red2);
+}
 .nav-dropdown-divider {
   height: 1px;
   background: var(--border);
 }
+
+/* Recent searches section */
+.nav-dropdown-recents {
+  padding: 8px 0 4px;
+}
+.nav-dropdown-recents-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 16px 7px;
+}
+.nav-dropdown-recents-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--t3);
+}
+.nav-dropdown-recents-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 10.5px;
+  color: var(--t3);
+  font-family: inherit;
+  padding: 0;
+  transition: color 140ms ease;
+}
+.nav-dropdown-recents-clear:hover {
+  color: var(--red);
+}
+.nav-dropdown-recents-empty {
+  padding: 4px 16px 10px;
+  font-size: 12px;
+  color: var(--t3);
+  margin: 0;
+}
+.nav-dropdown-recents-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.nav-dropdown-recents-item {
+  display: flex;
+  align-items: center;
+  padding: 0 8px 0 16px;
+}
+.nav-dropdown-recents-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  text-decoration: none;
+  font-size: 13px;
+  color: var(--t2);
+  transition: color 120ms ease;
+}
+.nav-dropdown-recents-name svg {
+  color: var(--t3);
+  flex-shrink: 0;
+}
+.nav-dropdown-recents-name span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav-dropdown-recents-name:hover {
+  color: var(--foreground);
+}
+.nav-dropdown-recents-name:hover svg {
+  color: var(--t2);
+}
+.nav-dropdown-recents-remove {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--t4);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  transition:
+    color 120ms ease,
+    background 120ms ease;
+}
+.nav-dropdown-recents-remove:hover {
+  color: var(--t2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .nav-dropdown-item {
   display: flex;
   align-items: center;
@@ -1833,7 +1992,14 @@ header.nav-scrolled {
 }
 @media (max-width: 640px) {
   header {
-    padding: 0 16px;
+    padding: 0 22px;
+  }
+  .logo-img {
+    width: 26px;
+    height: 26px;
+  }
+  .logo-wordmark {
+    font-size: 16px;
   }
   .hero {
     padding: 80px 16px 60px;
@@ -1878,7 +2044,7 @@ header.nav-scrolled {
   header.nav-scrolled {
     left: 12px;
     right: 12px;
-    padding: 0 14px;
+    padding: 0 18px;
   }
   .features-bento,
   .uc-steps-grid {
@@ -1908,7 +2074,7 @@ header.nav-scrolled {
 }
 @media (max-width: 380px) {
   .logo-wordmark {
-    font-size: 13px;
+    font-size: 16px;
   }
   .nav-signup {
     padding: 7px 14px;

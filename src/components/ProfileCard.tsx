@@ -27,10 +27,10 @@ function formatJoinDate(utc: number): string {
 
 function formatAge(utc: number): string {
   const days = Math.floor((Date.now() / 1000 - utc) / 86400);
-  if (days < 30) return `${days}d ago`;
+  if (days < 30) return `${days}d`;
   const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo ago`;
-  return `${Math.floor(months / 12)}y ago`;
+  if (months < 12) return `${months}mo`;
+  return `${Math.floor(months / 12)}y`;
 }
 
 function fmt(n: number): string {
@@ -43,25 +43,28 @@ function fmt(n: number): string {
 
 function SkeletonCard() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c]">
-      <div className="h-20 bg-gradient-to-br from-[rgba(255,69,0,0.12)] via-[rgba(124,58,237,0.08)] to-transparent" />
-      <div className="px-5 pb-6 pt-12">
-        <div className="mb-3 h-5 w-20 animate-pulse rounded-full bg-[#141414]" />
-        <div className="mb-2 h-6 w-40 animate-pulse rounded-lg bg-[#141414]" />
-        <div className="mb-5 h-3.5 w-full animate-pulse rounded bg-[#141414]" />
-        <div className="mb-5 grid grid-cols-2 gap-2">
-          {[1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              className="h-[72px] animate-pulse rounded-xl bg-[#141414]"
-            />
-          ))}
-        </div>
-        <div className="mb-5 space-y-2.5">
-          <div className="h-4 w-32 animate-pulse rounded bg-[#141414]" />
-          <div className="h-4 w-24 animate-pulse rounded bg-[#141414]" />
-        </div>
-        <div className="h-11 animate-pulse rounded-xl bg-[#141414]" />
+    <div className="rounded-2xl border border-[#141414] bg-[#080808]">
+      <div className="flex flex-col items-center px-6 pt-7 pb-5">
+        <div className="mb-4 h-[60px] w-[60px] animate-pulse rounded-full bg-[#141414]" />
+        <div className="mb-1.5 h-4 w-24 animate-pulse rounded-md bg-[#141414]" />
+        <div className="h-3 w-16 animate-pulse rounded bg-[#141414]" />
+      </div>
+      <div className="h-px bg-[#101010]" />
+      <div className="grid grid-cols-3 divide-x divide-[#101010]">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex flex-col items-center py-4 gap-1.5">
+            <div className="h-5 w-10 animate-pulse rounded bg-[#141414]" />
+            <div className="h-2 w-8 animate-pulse rounded bg-[#141414]" />
+          </div>
+        ))}
+      </div>
+      <div className="h-px bg-[#101010]" />
+      <div className="px-5 py-4 flex items-center justify-between">
+        <div className="h-3 w-20 animate-pulse rounded bg-[#141414]" />
+        <div className="h-3 w-16 animate-pulse rounded bg-[#141414]" />
+      </div>
+      <div className="px-5 pb-5">
+        <div className="h-9 animate-pulse rounded-lg bg-[#141414]" />
       </div>
     </div>
   );
@@ -74,25 +77,39 @@ export default function ProfileCard({ profile, username }: ProfileCardProps) {
     setImgError(false);
   }, [profile?.icon_img]);
 
-  // Show skeleton while loading (profile is undefined = still fetching)
   if (profile === undefined) return <SkeletonCard />;
 
-  // Profile is null = account not found or API error, show minimal fallback
   if (!profile) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c]">
-        <div className="h-20 bg-gradient-to-br from-[rgba(255,69,0,0.12)] via-[rgba(124,58,237,0.08)] to-transparent" />
-        <div className="px-5 pb-6 pt-12">
-          <p className="text-sm font-bold text-white">{username}</p>
-          <p className="mt-1 text-xs text-[#808080]">u/{username}</p>
+      <div className="rounded-2xl border border-[#141414] bg-[#080808]">
+        <div className="flex flex-col items-center px-6 pt-7 pb-5">
+          <div className="mb-3 flex h-[60px] w-[60px] items-center justify-center rounded-full bg-[#111] ring-1 ring-white/[0.03]">
+            <svg
+              className="h-6 w-6 text-[#2a2a2a]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <p className="text-[14px] font-bold text-white">{username}</p>
+          <p className="font-mono text-[11px] text-[#2e2e2e]">u/{username}</p>
+        </div>
+        <div className="px-5 pb-5">
           <a
             href={`https://reddit.com/u/${username}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-[#272727] bg-[#141414] py-3 text-sm font-semibold text-white transition-colors hover:border-[rgba(255,69,0,0.3)] hover:text-[#ff4500]"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#181818] py-2.5 text-[11px] font-semibold text-[#383838] transition-all hover:border-[#272727] hover:text-[#606060]"
           >
             <svg
-              className="h-4 w-4"
+              className="h-3.5 w-3.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -119,15 +136,13 @@ export default function ProfileCard({ profile, username }: ProfileCardProps) {
   const joinDate = formatJoinDate(profile.created_utc);
   const age = formatAge(profile.created_utc);
   const followers = profile.subreddit?.subscribers ?? 0;
-  const commentKarmaColor = profile.comment_karma < 0 ? "#ff6030" : "#60a5fa";
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#1a1a1a] bg-[#0c0c0c] shadow-2xl">
-      {/* Banner */}
-      <div className="relative h-20 bg-gradient-to-br from-[rgba(255,69,0,0.18)] via-[rgba(124,58,237,0.12)] to-[#0c0c0c]">
-        {/* Avatar, overlaps banner bottom */}
-        <div className="absolute -bottom-8 left-5">
-          <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-[#0c0c0c] ring-4 ring-[#0c0c0c]">
+    <div className="overflow-hidden rounded-2xl border border-[#141414] bg-[#080808]">
+      {/* Identity */}
+      <div className="flex flex-col items-center px-6 pt-7 pb-5">
+        <div className="relative mb-4">
+          <div className="h-[60px] w-[60px] overflow-hidden rounded-full ring-1 ring-white/[0.06]">
             {!isDefaultAvatar ? (
               <img
                 src={profile.icon_img}
@@ -136,21 +151,65 @@ export default function ProfileCard({ profile, username }: ProfileCardProps) {
                 onError={() => setImgError(true)}
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#ff4500] to-[#7c3aed]">
-                <span className="text-2xl font-black text-white">
+              <div className="flex h-full w-full items-center justify-center bg-[#111]">
+                <span className="text-xl font-black text-[#444]">
                   {profile.name.charAt(0).toUpperCase()}
                 </span>
               </div>
             )}
           </div>
+          {/* Account age chip */}
+          <span className="absolute -bottom-1 -right-1 rounded-full border border-[#1e1e1e] bg-[#0d0d0d] px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none text-[#3a3a3a]">
+            {age}
+          </span>
+        </div>
+
+        <h2 className="mb-0.5 break-all text-center text-[15px] font-bold leading-tight tracking-tight text-white">
+          {profile.name}
+        </h2>
+        <p className="font-mono text-[11px] text-[#2e2e2e]">u/{profile.name}</p>
+      </div>
+
+      <div className="h-px bg-[#101010]" />
+
+      {/* Stats — 3 column strip */}
+      <div className="grid grid-cols-3 divide-x divide-[#101010]">
+        <div className="flex flex-col items-center py-4">
+          <p className="mb-1 text-[17px] font-black leading-none text-[#ff4500]">
+            {fmt(profile.total_karma)}
+          </p>
+          <p className="text-[9px] font-semibold uppercase tracking-widest text-[#2a2a2a]">
+            Karma
+          </p>
+        </div>
+        <div className="flex flex-col items-center py-4">
+          <p className="mb-1 text-[17px] font-black leading-none text-white">
+            {fmt(profile.link_karma)}
+          </p>
+          <p className="text-[9px] font-semibold uppercase tracking-widest text-[#2a2a2a]">
+            Posts
+          </p>
+        </div>
+        <div className="flex flex-col items-center py-4">
+          <p
+            className="mb-1 text-[17px] font-black leading-none"
+            style={{ color: profile.comment_karma < 0 ? "#ff6030" : "#60a5fa" }}
+          >
+            {fmt(profile.comment_karma)}
+          </p>
+          <p className="text-[9px] font-semibold uppercase tracking-widest text-[#2a2a2a]">
+            Comments
+          </p>
         </div>
       </div>
 
-      <div className="px-5 pb-6 pt-12">
-        {/* Verified badge */}
-        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[rgba(34,197,94,0.25)] bg-[rgba(34,197,94,0.08)] px-2.5 py-1 text-[11px] font-semibold text-[#22c55e]">
+      <div className="h-px bg-[#101010]" />
+
+      {/* Meta row */}
+      <div className="flex items-center justify-between px-5 py-3.5">
+        <div className="flex items-center gap-1.5">
           <svg
-            className="h-3 w-3"
+            className="h-3 w-3 flex-shrink-0 text-[#242424]"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -158,114 +217,29 @@ export default function ProfileCard({ profile, username }: ProfileCardProps) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M5 13l4 4L19 7"
+              strokeWidth={1.5}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          Verified
-        </span>
-
-        {/* Username */}
-        <h2 className="mb-1 break-all text-[18px] font-black leading-tight tracking-tight text-white">
-          {profile.name}
-        </h2>
-
-        {/* Meta line */}
-        <p className="mb-5 text-[11px] leading-relaxed text-[#808080]">
-          u/{profile.name}&nbsp;&nbsp;·&nbsp;&nbsp;joined {joinDate}
-          &nbsp;&nbsp;·&nbsp;&nbsp;{age}
-        </p>
-
-        {/* Karma grid, 2×2 */}
-        <div className="mb-5 grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-[#1a1a1a] bg-[#0f0f0f] p-3">
-            <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#424242]">
-              Total Karma
-            </p>
-            <p className="text-[22px] font-black leading-none text-[#ff4500]">
-              {fmt(profile.total_karma)}
-            </p>
-          </div>
-          <div className="rounded-xl border border-[#1a1a1a] bg-[#0f0f0f] p-3">
-            <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#424242]">
-              Post Karma
-            </p>
-            <p className="text-[22px] font-black leading-none text-white">
-              {fmt(profile.link_karma)}
-            </p>
-          </div>
-          <div className="rounded-xl border border-[#1a1a1a] bg-[#0f0f0f] p-3">
-            <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#424242]">
-              Comment Karma
-            </p>
-            <p
-              className="text-[22px] font-black leading-none"
-              style={{ color: commentKarmaColor }}
-            >
-              {fmt(profile.comment_karma)}
-            </p>
-          </div>
-          <div className="rounded-xl border border-[#1a1a1a] bg-[#0f0f0f] p-3">
-            <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#424242]">
-              Awards
-            </p>
-            <p className="text-[22px] font-black leading-none text-[#22c55e]">
-              {fmt(profile.awardee_karma)}
-            </p>
-          </div>
+          <span className="text-[11px] text-[#343434]">{joinDate}</span>
         </div>
-
-        {/* Info rows */}
-        <div className="mb-5 space-y-2.5">
-          <div className="flex items-center gap-2.5 text-[13px] text-[#808080]">
-            <svg
-              className="h-4 w-4 flex-shrink-0 text-[#424242]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <rect
-                x="3"
-                y="4"
-                width="18"
-                height="18"
-                rx="2"
-                ry="2"
-                strokeWidth={1.5}
-              />
-              <line x1="16" y1="2" x2="16" y2="6" strokeWidth={1.5} />
-              <line x1="8" y1="2" x2="8" y2="6" strokeWidth={1.5} />
-              <line x1="3" y1="10" x2="21" y2="10" strokeWidth={1.5} />
-            </svg>
-            Joined {joinDate}
-          </div>
-          <div className="flex items-center gap-2.5 text-[13px] text-[#808080]">
-            <svg
-              className="h-4 w-4 flex-shrink-0 text-[#424242]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
+        {followers > 0 && (
+          <span className="text-[11px] text-[#343434]">
             {followers.toLocaleString()} followers
-          </div>
-        </div>
+          </span>
+        )}
+      </div>
 
-        {/* View on Reddit CTA */}
+      {/* CTA */}
+      <div className="px-5 pb-5">
         <a
           href={`https://reddit.com/u/${profile.name}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#272727] bg-[#141414] py-3 text-[13px] font-semibold text-white transition-all hover:border-[rgba(255,69,0,0.35)] hover:bg-[rgba(255,69,0,0.05)] hover:text-[#ff4500]"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-[rgba(255,69,0,0.1)] bg-[rgba(255,69,0,0.04)] py-2.5 text-[12px] font-semibold text-[rgba(255,69,0,0.45)] transition-all hover:border-[rgba(255,69,0,0.22)] hover:bg-[rgba(255,69,0,0.08)] hover:text-[#ff4500]"
         >
           <svg
-            className="h-4 w-4"
+            className="h-3.5 w-3.5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

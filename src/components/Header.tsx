@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useRecentSearches } from "@/lib/use-recent-searches";
 
 interface AuthUser {
   userId: string;
@@ -15,7 +17,11 @@ export default function Header() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [credits, setCredits] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const router = useRouter();
+  const { recents, removeSearch, clearAll } = useRecentSearches();
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -23,6 +29,15 @@ export default function Header() {
       .then((data) => setUser(data.user || null))
       .catch(() => setUser(null));
   }, []);
+
+  useEffect(() => {
+    if (dropdownOpen && user) {
+      fetch("/api/credits")
+        .then((r) => r.json())
+        .then((data) => setCredits(data.credits))
+        .catch(() => {});
+    }
+  }, [dropdownOpen, user]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -50,6 +65,14 @@ export default function Header() {
     window.location.href = "/";
   };
 
+  const handleHomeClick = () => {
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      router.push("/");
+    }
+  };
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -61,8 +84,8 @@ export default function Header() {
           <Image
             src="/avatar-removebg.png"
             alt="redditprofile"
-            width={30}
-            height={30}
+            width={33}
+            height={33}
             className="logo-img"
             priority
           />
@@ -72,10 +95,7 @@ export default function Header() {
         </a>
 
         <nav className="nav-links" aria-label="Main">
-          <button
-            className="nav-link"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
+          <button className="nav-link" onClick={handleHomeClick}>
             Home
           </button>
           <button className="nav-link" onClick={() => scrollTo("features")}>
@@ -116,21 +136,86 @@ export default function Header() {
 
               {dropdownOpen && (
                 <div className="nav-dropdown" role="menu">
+                  {/* User identity row */}
                   <div className="nav-dropdown-user">
-                    <p className="nav-dropdown-name">{user.username}</p>
-                    <p className="nav-dropdown-email">{user.email}</p>
+                    <div className="nav-dropdown-avatar">
+                      {user.avatarUrl ? (
+                        <img
+                          src={user.avatarUrl}
+                          alt=""
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      ) : (
+                        (user.username[0]?.toUpperCase() ?? "?")
+                      )}
+                    </div>
+                    <div className="nav-dropdown-user-info">
+                      <p className="nav-dropdown-name">{user.username}</p>
+                      <p className="nav-dropdown-email">{user.email}</p>
+                    </div>
+                    {credits !== null && (
+                      <div
+                        className={`nav-dropdown-credits${credits === -1 ? " nav-dropdown-credits-pro" : ""}`}
+                      >
+                        {credits === -1 ? "PRO" : `${credits} left`}
+                      </div>
+                    )}
                   </div>
+
                   <div className="nav-dropdown-divider" />
-                  <a
-                    href="/history"
-                    className="nav-dropdown-item"
-                    role="menuitem"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <HistoryIcon />
-                    Search History
-                  </a>
+
+                  {/* Recent searches */}
+                  <div className="nav-dropdown-recents">
+                    <div className="nav-dropdown-recents-header">
+                      <span className="nav-dropdown-recents-label">
+                        Recent Searches
+                      </span>
+                      {recents.length > 0 && (
+                        <button
+                          className="nav-dropdown-recents-clear"
+                          onClick={clearAll}
+                        >
+                          Clear all
+                        </button>
+                      )}
+                    </div>
+
+                    {recents.length === 0 ? (
+                      <p className="nav-dropdown-recents-empty">
+                        No recent searches yet
+                      </p>
+                    ) : (
+                      <ul className="nav-dropdown-recents-list">
+                        {recents.slice(0, 5).map((name) => (
+                          <li key={name} className="nav-dropdown-recents-item">
+                            <a
+                              href={`/search?u=${encodeURIComponent(name)}`}
+                              className="nav-dropdown-recents-name"
+                              onClick={() => setDropdownOpen(false)}
+                            >
+                              <ClockIcon />
+                              <span>{name}</span>
+                            </a>
+                            <button
+                              className="nav-dropdown-recents-remove"
+                              onClick={() => removeSearch(name)}
+                              aria-label={`Remove ${name}`}
+                            >
+                              <XIcon />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
                   <div className="nav-dropdown-divider" />
+
                   <button
                     className="nav-dropdown-item nav-dropdown-signout"
                     role="menuitem"
@@ -180,11 +265,11 @@ function ChevronIcon({ open }: { open: boolean }) {
   );
 }
 
-function HistoryIcon() {
+function ClockIcon() {
   return (
     <svg
-      width="14"
-      height="14"
+      width="12"
+      height="12"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -192,9 +277,29 @@ function HistoryIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      style={{ flexShrink: 0 }}
     >
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg
+      width="10"
+      height="10"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
     </svg>
   );
 }

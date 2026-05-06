@@ -78,8 +78,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Protect /admin pages, let the page show a login form if not authenticated
-  if (pathname.startsWith("/admin") && !pathname.startsWith("/api/")) {
+  // Protect /abba pages, let the page show a login form if not authenticated
+  if (pathname.startsWith("/abba") && !pathname.startsWith("/api/")) {
     const token = request.cookies.get("ttp_admin")?.value;
     if (!token) {
       return response;
@@ -99,5 +99,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/abba/:path*", "/api/admin/:path*"],
 };

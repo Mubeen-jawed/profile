@@ -77,6 +77,14 @@ export default function Header() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handlePricingClick = () => {
+    if (pathname === "/") {
+      scrollTo("pricing");
+    } else {
+      router.push("/#pricing");
+    }
+  };
+
   return (
     <div className="nav-shell">
       <header className={scrolled ? "nav-scrolled" : ""}>
@@ -101,9 +109,9 @@ export default function Header() {
           <button className="nav-link" onClick={() => scrollTo("features")}>
             Features
           </button>
-          <a href="/pricing" className="nav-link">
+          <button className="nav-link" onClick={handlePricingClick}>
             Pricing
-          </a>
+          </button>
         </nav>
 
         <div className="nav-ctas">

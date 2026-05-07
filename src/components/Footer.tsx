@@ -35,9 +35,9 @@ export default function Footer() {
           <button className="footer-link" onClick={() => scrollTo("use-cases")}>
             Use Cases
           </button>
-          <button className="footer-link" onClick={() => scrollTo("pricing")}>
+          <a href="/pricing" className="footer-link">
             Pricing
-          </button>
+          </a>
         </nav>
 
         <nav className="footer-nav" aria-label="Legal">

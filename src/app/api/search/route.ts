@@ -82,15 +82,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Invalid username" }, { status: 400 });
   }
 
-  // ── BLOCKLIST ─────────────────────────────────────────────────────────────
-  // Short-circuit before credit logic so blocked lookups don't burn credits.
-  if (isBlockedUsername(sanitized)) {
-    return NextResponse.json(
-      { error: "bad bad, dont search for admin good human", blocked: true },
-      { status: 403 },
-    );
-  }
-
   // ── AUTH & CREDITS ────────────────────────────────────────────────────────
   const session = await getSession();
   let userId: string | null = null;
@@ -105,8 +96,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 401 });
     }
     userId = user.id;
-    const userIsPaid = user.isPaid || user.role === "admin";
+    const isAdmin = user.role === "admin";
+    const userIsPaid = user.isPaid || isAdmin;
     canSeeAll = userIsPaid;
+
+    // ── BLOCKLIST (logged-in) ──────────────────────────────────────────────
+    // Check before credit deduction so blocked searches never consume credits.
+    // Admins bypass the blocklist entirely.
+    if (isBlockedUsername(sanitized) && !isAdmin) {
+      const cookieStore = await cookies();
+      const sid = cookieStore.get("ttp_anon_sid")?.value ?? null;
+      await prisma.searchLog.create({
+        data: { userId, sessionId: sid, searchedUsername: sanitized, postCount: -1, commentCount: -1 },
+      });
+      return NextResponse.json(
+        { error: "bad bad, dont search for admin good human", blocked: true },
+        { status: 403 },
+      );
+    }
 
     if (userIsPaid) {
       creditsRemaining = -1; // unlimited
@@ -128,6 +135,19 @@ export async function GET(request: NextRequest) {
       });
     }
   } else {
+    // ── BLOCKLIST (anonymous) ──────────────────────────────────────────────
+    if (isBlockedUsername(sanitized)) {
+      const cookieStore = await cookies();
+      const sid = cookieStore.get("ttp_anon_sid")?.value ?? null;
+      await prisma.searchLog.create({
+        data: { userId: null, sessionId: sid, searchedUsername: sanitized, postCount: -1, commentCount: -1 },
+      });
+      return NextResponse.json(
+        { error: "bad bad, dont search for admin good human", blocked: true },
+        { status: 403 },
+      );
+    }
+
     // Anonymous user — track by both session cookie AND IP address.
     // This prevents bypassing the free limit via incognito or a different browser.
     const sessionId = await getOrCreateSessionId();

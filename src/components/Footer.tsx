@@ -52,6 +52,13 @@ export default function Footer() {
             Refund Policy
           </a>
         </nav>
+
+        <nav className="footer-nav" aria-label="Support">
+          <p className="footer-col-heading">Support</p>
+          <a href="mailto:support@redditprofile.com" className="footer-link">
+            support@redditprofile.com
+          </a>
+        </nav>
       </div>
 
       <div className="footer-bottom">

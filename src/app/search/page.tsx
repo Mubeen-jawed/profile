@@ -236,7 +236,6 @@ function SearchContent() {
 
   useEffect(() => {
     if (!username) return;
-    if (isBlocked) return;
 
     const controller = new AbortController();
     let stageTimer: ReturnType<typeof setInterval> | null = null;
@@ -432,7 +431,7 @@ function SearchContent() {
       {!isBlocked && loading && <SearchSkeleton username={username} />}
 
       {/* Error state */}
-      {error && (
+      {!isBlocked && error && (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-500/10">
             <svg

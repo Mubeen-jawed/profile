@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
         searchedUsername: s.searchedUsername,
         postCount: s.postCount,
         commentCount: s.commentCount,
+        isBlocked: s.postCount === -1,
         createdAt: s.createdAt,
         performedBy: s.user?.username ?? "Anonymous",
         avatarUrl: s.user?.avatarUrl ?? null,

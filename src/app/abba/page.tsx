@@ -22,6 +22,7 @@ interface RecentSearch {
   searchedUsername: string;
   postCount: number;
   commentCount: number;
+  isBlocked?: boolean;
   createdAt: string;
   performedBy: string;
   avatarUrl: string | null;
@@ -578,8 +579,8 @@ export default function AdminDashboard() {
                 <p className="px-5 py-8 text-center text-sm text-zinc-600">Loading…</p>
               ) : (
                 searchLog.map((s) => (
-                  <div key={s.id} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-background/50 sm:gap-4 sm:px-5">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-accent/10 text-xs font-bold text-green-accent">
+                  <div key={s.id} className={`flex items-center gap-3 px-4 py-3 transition-colors sm:gap-4 sm:px-5 ${s.isBlocked ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-background/50"}`}>
+                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${s.isBlocked ? "bg-amber-500/20 text-amber-400" : "bg-green-accent/10 text-green-accent"}`}>
                       {s.avatarUrl ? (
                         <img src={s.avatarUrl} alt="" className="h-8 w-8 rounded-full" />
                       ) : (
@@ -589,10 +590,13 @@ export default function AdminDashboard() {
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-foreground truncate sm:text-sm">
                         <span className="text-zinc-400">{s.performedBy}</span> searched{" "}
-                        <span className="font-medium text-green-accent">u/{s.searchedUsername}</span>
+                        <span className={`font-medium ${s.isBlocked ? "text-amber-400" : "text-green-accent"}`}>u/{s.searchedUsername}</span>
+                        {s.isBlocked && (
+                          <span className="ml-2 inline-flex rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">BLOCKED</span>
+                        )}
                       </p>
                       <p className="text-[10px] text-zinc-600 sm:text-xs">
-                        {s.postCount} posts, {s.commentCount} comments
+                        {s.isBlocked ? "blocked attempt" : `${s.postCount} posts, ${s.commentCount} comments`}
                       </p>
                     </div>
                     <span className="hidden whitespace-nowrap text-xs text-zinc-600 sm:block">
@@ -945,11 +949,16 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody className="divide-y divide-card-border">
                   {searchLog.map((s) => (
-                    <tr key={s.id} className="transition-colors hover:bg-background/50">
-                      <td className="px-4 py-2.5 text-sm font-medium text-green-accent">u/{s.searchedUsername}</td>
+                    <tr key={s.id} className={`transition-colors ${s.isBlocked ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-background/50"}`}>
+                      <td className="px-4 py-2.5">
+                        <span className={`text-sm font-medium ${s.isBlocked ? "text-amber-400" : "text-green-accent"}`}>u/{s.searchedUsername}</span>
+                        {s.isBlocked && (
+                          <span className="ml-2 inline-flex rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">BLOCKED</span>
+                        )}
+                      </td>
                       <td className="px-4 py-2.5 text-sm text-zinc-300">{s.performedBy}</td>
-                      <td className="px-4 py-2.5 text-sm text-zinc-400">{s.postCount}</td>
-                      <td className="px-4 py-2.5 text-sm text-zinc-400">{s.commentCount}</td>
+                      <td className="px-4 py-2.5 text-sm text-zinc-400">{s.isBlocked ? "—" : s.postCount}</td>
+                      <td className="px-4 py-2.5 text-sm text-zinc-400">{s.isBlocked ? "—" : s.commentCount}</td>
                       <td className="px-4 py-2.5 text-sm text-zinc-500">
                         {new Date(s.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </td>
@@ -964,15 +973,20 @@ export default function AdminDashboard() {
             {/* Mobile list */}
             <div className="divide-y divide-card-border sm:hidden">
               {searchLog.map((s) => (
-                <div key={s.id} className="px-4 py-3">
+                <div key={s.id} className={`px-4 py-3 ${s.isBlocked ? "bg-amber-500/5" : ""}`}>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-green-accent">u/{s.searchedUsername}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-sm font-medium ${s.isBlocked ? "text-amber-400" : "text-green-accent"}`}>u/{s.searchedUsername}</span>
+                      {s.isBlocked && (
+                        <span className="inline-flex rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber-400">BLOCKED</span>
+                      )}
+                    </div>
                     <span className="text-[10px] text-zinc-600">
                       {new Date(s.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
                   <p className="mt-0.5 text-xs text-zinc-400">
-                    by {s.performedBy} &middot; {s.postCount} posts, {s.commentCount} comments
+                    by {s.performedBy} &middot; {s.isBlocked ? "blocked attempt" : `${s.postCount} posts, ${s.commentCount} comments`}
                   </p>
                 </div>
               ))}

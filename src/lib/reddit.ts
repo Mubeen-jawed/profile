@@ -51,6 +51,25 @@ export interface RedditUserProfile {
 const REDDIT_USER_AGENT = "redditprofile/1.0";
 const ARCTIC_SHIFT_BASE = "https://arctic-shift.photon-reddit.com/api";
 
+// Every upstream request shares a default timeout so a single slow or hung
+// API can't stall the whole search past the serverless function limit. On
+// Vercel that would otherwise return an empty response body to the client
+// (surfacing as "Unexpected end of JSON input"). Each call site already
+// catches fetch errors and returns partial results, so an abort degrades
+// gracefully instead of failing the entire search.
+const UPSTREAM_TIMEOUT_MS = 9000;
+const baseFetch = globalThis.fetch;
+function fetch(
+  input: Parameters<typeof baseFetch>[0],
+  init?: Parameters<typeof baseFetch>[1],
+): ReturnType<typeof baseFetch> {
+  if (init?.signal) return baseFetch(input, init);
+  return baseFetch(input, {
+    ...init,
+    signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+  });
+}
+
 // Small delay to avoid Reddit rate limits when making many requests
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

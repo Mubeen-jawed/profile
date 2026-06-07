@@ -20,6 +20,12 @@ import { cookies } from "next/headers";
 import { rateLimit } from "@/lib/rate-limit";
 import { isBlockedUsername } from "@/lib/blocked-usernames";
 
+// The deep search fans out to many upstream APIs; give the serverless
+// function enough headroom to finish instead of being killed mid-request
+// (which returns an empty body the client can't parse).
+export const maxDuration = 60;
+export const runtime = "nodejs";
+
 function dedup<T extends { id: string }>(items: T[]): T[] {
   const seen = new Set<string>();
   return items.filter((item) => {

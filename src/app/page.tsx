@@ -23,7 +23,7 @@ export default function Home() {
 
         <LandingSearchForm />
 
-        <div className="promo-banner mt-6">
+        {/* <div className="promo-banner mt-6">
           <svg
             className="h-3.5 w-3.5 flex-shrink-0"
             fill="none"
@@ -38,7 +38,7 @@ export default function Home() {
             />
           </svg>
           lifetime access, for the first 30 users only
-        </div>
+        </div> */}
       </section>
 
       {/* ── Features ── */}

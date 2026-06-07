@@ -88,6 +88,7 @@ export async function GET(request: NextRequest) {
   let creditsRemaining = 0;
   let canSeeAll = false;
 
+  try {
   if (session) {
     const user = await prisma.user.findUnique({
       where: { id: session.userId },
@@ -195,6 +196,16 @@ export async function GET(request: NextRequest) {
       });
     }
     creditsRemaining = ANON_LIMIT - used - 1;
+  }
+  } catch (err) {
+    console.error(
+      "[search] auth/credits failed:",
+      err instanceof Error ? err.message : err,
+    );
+    return NextResponse.json(
+      { error: "Could not start the search. Please try again." },
+      { status: 500 },
+    );
   }
 
   try {

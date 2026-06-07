@@ -259,12 +259,38 @@ function SearchContent() {
           { signal: controller.signal },
         );
 
-        if (!res.ok) {
-          const data = await res.json();
-          throw new Error(data.error || "Search failed");
+        // Parse the body defensively: a timed-out or crashed server can return
+        // an empty / non-JSON body, which would otherwise throw
+        // "Unexpected end of JSON input" when we call res.json().
+        const raw = await res.text();
+        let payload: (SearchResult & { error?: string }) | null = null;
+        if (raw) {
+          try {
+            payload = JSON.parse(raw);
+          } catch {
+            payload = null;
+          }
         }
 
-        const data: SearchResult = await res.json();
+        if (!res.ok) {
+          if (payload?.error) throw new Error(payload.error);
+          if (res.status === 429) {
+            throw new Error(
+              "Too many searches. Please slow down and try again shortly.",
+            );
+          }
+          throw new Error(
+            "Search failed. The user may have too much activity — please try again.",
+          );
+        }
+
+        if (!payload) {
+          throw new Error(
+            "Search returned no data. Please try again in a moment.",
+          );
+        }
+
+        const data: SearchResult = payload;
         if (!cancelled) {
           setResults(data);
           // Refresh credits after search
@@ -422,7 +448,7 @@ function SearchContent() {
             </svg>
           </div>
           <p className="text-center text-lg font-semibold text-foreground">
-            Why are you trying to stalk the admin, huh?
+             bad bad, dont search for admin good human
           </p>
         </div>
       )}

@@ -202,7 +202,7 @@ export default function Header() {
                         {recents.slice(0, 5).map((name) => (
                           <li key={name} className="nav-dropdown-recents-item">
                             <a
-                              href={`/search?u=${encodeURIComponent(name)}`}
+                              href={`/search?username=${encodeURIComponent(name)}`}
                               className="nav-dropdown-recents-name"
                               onClick={() => setDropdownOpen(false)}
                             >
@@ -223,6 +223,16 @@ export default function Header() {
                   </div>
 
                   <div className="nav-dropdown-divider" />
+
+                  <a
+                    href="/history"
+                    className="nav-dropdown-item"
+                    role="menuitem"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <HistoryIcon />
+                    History
+                  </a>
 
                   <button
                     className="nav-dropdown-item nav-dropdown-signout"
@@ -308,6 +318,26 @@ function XIcon() {
     >
       <line x1="18" y1="6" x2="6" y2="18" />
       <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function HistoryIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3 3v5h5" />
+      <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8" />
+      <polyline points="12 7 12 12 15 14" />
     </svg>
   );
 }

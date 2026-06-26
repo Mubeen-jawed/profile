@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "redditprofile, Reddit Profile Intelligence",
+  title: "redditprofile, Public Reddit Profile Viewer",
   description:
     "Instantly surface posts, comments, karma, and activity patterns for any Reddit user. Complete public profile analysis in seconds.",
   metadataBase: new URL(process.env.APP_URL || "https://redditprofile.com"),
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "redditprofile",
-    title: "redditprofile, Reddit Profile Intelligence",
+    title: "redditprofile, Public Reddit Profile Viewer",
     description:
       "Surface the complete public history of any Reddit user in seconds.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "redditprofile, Reddit Profile Intelligence",
+    title: "redditprofile, Public Reddit Profile Viewer",
     description:
       "Instantly analyze posts, comments, and karma for any Reddit user.",
   },

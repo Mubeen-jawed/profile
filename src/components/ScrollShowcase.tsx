@@ -169,7 +169,7 @@ export default function ScrollShowcase() {
         />
 
         <p className="absolute top-12 text-[11px] font-bold tracking-[2.8px] text-white/25 sm:text-xs">
-          redditprofile · REDDIT INTELLIGENCE
+          redditprofile · PUBLIC PROFILE VIEWER
         </p>
 
         <div className="relative flex h-[220px] w-full items-center justify-center">

@@ -52,9 +52,9 @@ export default function PrivacyPage() {
           </h3>
           <p>
             When you make a purchase, payment information such as credit card
-            numbers is processed by our third-party payment processor. We do not
-            store your full credit card number or payment credentials on our
-            servers.
+            numbers is processed by Polar (polar.sh), our Merchant of Record and
+            third-party payment processor. We do not store your full credit card
+            number or payment credentials on our servers.
           </p>
 
           <h3 className="text-sm font-semibold text-foreground">
@@ -148,8 +148,9 @@ export default function PrivacyPage() {
               account authentication, subject to Google&apos;s Privacy Policy.
             </li>
             <li>
-              <strong className="text-zinc-300">Payment Processor:</strong> For
-              processing payments, subject to their privacy policy.
+              <strong className="text-zinc-300">Polar:</strong> Our Merchant of
+              Record and payment processor, used to complete purchases and
+              handle billing, subject to Polar&apos;s Privacy Policy.
             </li>
             <li>
               <strong className="text-zinc-300">Cloudflare:</strong> For

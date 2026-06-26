@@ -178,7 +178,7 @@ function PaywallOverlay({ hiddenCount }: { hiddenCount: number }) {
       <div className="paywall-body">
         <p className="paywall-eyebrow">Lifetime Pro</p>
 
-        <p className="paywall-price">$9</p>
+        <p className="paywall-price">$3.99</p>
 
         <p className="paywall-copy">
           Every post &amp; comment, unlimited searches,{" "}
@@ -491,7 +491,7 @@ function SearchContent() {
               href="/api/checkout"
               className="mt-4 rounded-lg bg-green-accent px-5 py-2 text-sm font-bold text-white hover:bg-[#cc3700]"
             >
-              Pay $9, Upgrade to Pro
+              Pay $3.99, Upgrade to Pro
             </a>
           )}
         </div>

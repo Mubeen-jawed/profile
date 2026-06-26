@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing, redditprofile",
   description:
-    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $9 one-time, unlimited Reddit profile analysis.",
+    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $3.99 one-time, unlimited Reddit profile analysis.",
 };
 
 export default function PricingPage() {
@@ -79,7 +79,7 @@ export default function PricingPage() {
             Lifetime Pro
           </h2>
           <div className="mb-6">
-            <span className="text-3xl font-bold text-foreground">$9</span>
+            <span className="text-3xl font-bold text-foreground">$3.99</span>
             <span className="text-zinc-500"> one-time</span>
           </div>
           <ul className="mb-6 space-y-3">
@@ -164,7 +164,7 @@ export default function PricingPage() {
           />
           <FaqItem
             question="Is this a subscription?"
-            answer="No. The Lifetime Pro plan is a one-time payment of $9. You will never be billed again after purchase."
+            answer="No. The Lifetime Pro plan is a one-time payment of $3.99. You will never be billed again after purchase."
           />
           <FaqItem
             question="Can I get a refund?"
@@ -176,14 +176,18 @@ export default function PricingPage() {
           />
           <FaqItem
             question="What payment methods are accepted?"
-            answer="We accept all major credit and debit cards, PayPal, and other payment methods through our secure payment processor."
+            answer="We accept all major credit and debit cards and other methods supported by our payment provider. Payments are processed securely by Polar, our Merchant of Record."
+          />
+          <FaqItem
+            question="Who processes my payment?"
+            answer="All purchases are processed by Polar (polar.sh), which acts as the Merchant of Record. Polar handles billing and any applicable sales tax or VAT, and the charge appears on your statement under our Polar descriptor."
           />
         </div>
       </div>
 
       <p className="mt-12 text-center text-sm text-zinc-500">
         Questions?{" "}
-        <Link href="/#contact" className="text-green-accent hover:underline">
+        <Link href="/contact" className="text-green-accent hover:underline">
           Contact us
         </Link>{" "}
         , we&apos;re happy to help.

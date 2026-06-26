@@ -86,15 +86,18 @@ export default function TermsPage() {
         <Section title="5. Payments and Billing">
           <p>
             redditprofile offers a free tier with limited searches and a paid
-            Lifetime Pro plan for a one-time payment of $9 (USD). The Lifetime
+            Lifetime Pro plan for a one-time payment of $3.99 (USD). The Lifetime
             Pro plan grants unlimited access to full search results with no
             recurring charges.
           </p>
           <p>
-            Payments are processed by our third-party payment processor. By
-            making a purchase, you agree to that processor&apos;s terms and
-            conditions. Prices are subject to change, but changes do not affect
-            previously completed purchases.
+            Payments are processed by Polar (polar.sh), which acts as the
+            Merchant of Record for all purchases. Polar handles payment
+            processing, billing, and any applicable sales tax or VAT on our
+            behalf, and the charge will appear on your statement under our Polar
+            descriptor. By making a purchase, you also agree to Polar&apos;s
+            terms and conditions. Prices are subject to change, but changes do
+            not affect previously completed purchases.
           </p>
         </Section>
 

@@ -18,7 +18,8 @@ export default function Home() {
         </h1>
 
         <p className="sub">
-          Search Your Next Prospect, Friend or Potential Partner in seconds.
+          See any user&apos;s public Reddit activity — karma, post history, and
+          account age — in seconds.
         </p>
 
         <LandingSearchForm />
@@ -219,26 +220,26 @@ export default function Home() {
           </svg>
         </div>
         <h2 className="section-heading">
-          Real reasons <span className="uc-accent">people search</span>
+          Why people <span className="uc-accent">look up a profile</span>
         </h2>
         <p className="section-subtext">
-          You don&apos;t always know who you&apos;re dealing with. Here&apos;s
-          where a quick lookup{" "}
-          <strong className="uc-subtext-em">changes everything.</strong>
+          A few common reasons people pull up a public Reddit profile,{" "}
+          <strong className="uc-subtext-em">all from data Reddit already
+          shows.</strong>
         </p>
 
         <div className="uc-steps-grid">
           {/* Step 1 */}
           <div className="uc-step-card">
-            {/* <img src={useCases1} alt="Know who you're dealing with" /> */}
+            {/* <img src={useCases1} alt="Understand a public Reddit account at a glance" /> */}
             <div className="uc-step-content">
               <h3 className="uc-step-title">
-                Know exactly who you&apos;re dealing with
+                Understand an account at a glance
               </h3>
               <p className="uc-step-desc">
-                Before you hire, date, or buy, pull up their Reddit. Account
-                age, karma history, and posting patterns tell you whether
-                someone&apos;s story holds water.
+                Pull up any public Reddit account and see its age, karma
+                history, and posting patterns in one place — all from data
+                Reddit already shows publicly.
               </p>
             </div>
           </div>
@@ -248,13 +249,12 @@ export default function Home() {
             {/* <img src={useCases2} alt="Spot red flags with account analysis" /> */}
             <div className="uc-step-content">
               <h3 className="uc-step-title">
-                Spot red flags before it&apos;s too late
+                Recognize bots and throwaway accounts
               </h3>
               <p className="uc-step-desc">
-                Brand new account. Zero karma. Too-good-to-be-true offer.
-                Surfaces the patterns scammers can&apos;t fake, account age,
-                activity, and behavior across every subreddit they&apos;ve
-                touched.
+                Brand-new account, zero karma, copy-paste activity — the public
+                signals that distinguish an established account from a throwaway,
+                across every subreddit it has posted in.
               </p>
             </div>
           </div>
@@ -263,14 +263,14 @@ export default function Home() {
           <div className="uc-step-card">
             {/* <img
               src={useCases3}
-              alt="See who they really are across subreddits"
+              alt="See an account's public activity across subreddits"
             /> */}
             <div className="uc-step-content">
-              <h3 className="uc-step-title">See who they really are</h3>
+              <h3 className="uc-step-title">See an account&apos;s public side</h3>
               <p className="uc-step-desc">
-                What someone posts when no one&apos;s watching says everything.
-                See their communities, passions, and opinions, and form a real
-                picture before your first conversation.
+                The subreddits an account posts in and the topics it engages
+                with — a quick read on a user&apos;s public interests and
+                communities.
               </p>
             </div>
           </div>
@@ -355,7 +355,7 @@ export default function Home() {
             </div>
             <div className="price-tier">Pro</div>
             <div className="price-amount">
-              <sup>$</sup>9
+              <sup>$</sup>3.99
             </div>
             <div className="price-cadence">
               one-time payment, lifetime access

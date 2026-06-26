@@ -23,7 +23,7 @@ export default function Footer() {
             />
           </a>
           <p className="footer-tagline">
-            Instant intelligence on any Reddit user
+            A clear view of any public Reddit profile
           </p>
         </div>
 
@@ -55,6 +55,9 @@ export default function Footer() {
 
         <nav className="footer-nav" aria-label="Support">
           <p className="footer-col-heading">Support</p>
+          <a href="/contact" className="footer-link">
+            Contact
+          </a>
           <a href="mailto:support@redditprofile.com" className="footer-link">
             support@redditprofile.com
           </a>
@@ -65,7 +68,7 @@ export default function Footer() {
         <span className="footer-copy">
           © {new Date().getFullYear()}{" "}
           <span className="gr footer-brand-name">redditprofile</span>. All
-          rights reserved.
+          rights reserved. Not affiliated with or endorsed by Reddit, Inc.
         </span>
         <div className="footer-bottom-links">
           <a href="/privacy" className="footer-bottom-link">

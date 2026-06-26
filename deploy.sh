@@ -4,7 +4,8 @@
 # Target:    Ubuntu VPS, app on port 3000, served at https://redditprofile.com
 #
 # Idempotent: every step checks for existing state and SKIPS work already done,
-# so it is safe to re-run for updates. Run as root (or with sudo).
+# so it is safe to re-run for updates. Run as root (or with sudo) from inside
+# the project directory (the code must already be on the box).
 #
 #   sudo bash deploy.sh
 #
@@ -16,9 +17,9 @@ set -euo pipefail
 
 # ----------------------------- configuration -------------------------------
 APP_NAME="redditprofile"
-APP_DIR="/opt/${APP_NAME}"
-REPO_URL="https://github.com/Asad-noob69/redditprofile.git"
-BRANCH="main"
+# Code is expected to already be on the box — default to the directory this
+# script lives in. Override with APP_DIR=/path sudo -E bash deploy.sh
+APP_DIR="${APP_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 PORT="3000"
 DOMAIN="redditprofile.com"
 NODE_MAJOR="22"
@@ -98,12 +99,9 @@ sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${DB_US
 
 # ----------------------------- 5. source code ------------------------------
 log "Application source at ${APP_DIR}"
-if [ -d "${APP_DIR}/.git" ]; then
-  skip "repo present — pulling latest"
-  git -C "${APP_DIR}" fetch --depth 1 origin "${BRANCH}"
-  git -C "${APP_DIR}" reset --hard "origin/${BRANCH}"
-else
-  git clone --branch "${BRANCH}" "${REPO_URL}" "${APP_DIR}"
+if [ ! -f "${APP_DIR}/package.json" ]; then
+  echo "No package.json in ${APP_DIR} — put the code there first (git/scp/CI)." >&2
+  exit 1
 fi
 cd "${APP_DIR}"
 

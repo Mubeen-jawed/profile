@@ -18,7 +18,6 @@ import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import { rateLimit } from "@/lib/rate-limit";
-import { isBlockedUsername } from "@/lib/blocked-usernames";
 
 // The deep search fans out to many upstream APIs; give the serverless
 // function enough headroom to finish instead of being killed mid-request
@@ -54,10 +53,7 @@ async function getOrCreateSessionId(): Promise<string> {
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const username = searchParams.get("username");
-
-  // Rate limit: 30 searches per 15 min per IP
+  // Rate limit: 30 refreshes per 15 min per IP
   const ip =
     request.headers.get("cf-connecting-ip") ||
     request.headers.get("x-real-ip") ||
@@ -66,61 +62,57 @@ export async function GET(request: NextRequest) {
   const { allowed } = rateLimit(`search:${ip}`, 30, 15 * 60 * 1000);
   if (!allowed) {
     return NextResponse.json(
-      { error: "Too many searches. Please slow down and try again shortly." },
+      { error: "Too many requests. Please slow down and try again shortly." },
       { status: 429 },
     );
   }
 
-  if (!username || username.trim().length === 0) {
+  // ── AUTH ──────────────────────────────────────────────────────────────────
+  // Self-analytics only. A signed-in user may analyze their OWN connected
+  // Reddit account. Any client-supplied username is ignored; the account is
+  // always the Reddit identity the user verified through OAuth.
+  const session = await getSession();
+  if (!session) {
     return NextResponse.json(
-      { error: "Username is required" },
-      { status: 400 },
+      { error: "Please sign in to view your Reddit analytics." },
+      { status: 401 },
     );
   }
 
-  const sanitized = username
-    .trim()
-    .replace(/^https?:\/\/(www\.|old\.|new\.)?reddit\.com\//i, "")
-    .replace(/^\/?(u|user)\//i, "")
-    .replace(/\/+$/, "")
-    .replace(/[^a-zA-Z0-9_-]/g, "");
-  if (sanitized.length === 0 || sanitized.length > 50) {
-    return NextResponse.json({ error: "Invalid username" }, { status: 400 });
-  }
-
-  // ── AUTH & CREDITS ────────────────────────────────────────────────────────
-  const session = await getSession();
-  let userId: string | null = null;
+  let userId: string;
   let creditsRemaining = 0;
   let canSeeAll = false;
+  let sanitized: string;
 
   try {
-  if (session) {
     const user = await prisma.user.findUnique({
       where: { id: session.userId },
     });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 401 });
     }
-    userId = user.id;
-    const isAdmin = user.role === "admin";
-    const userIsPaid = user.isPaid || isAdmin;
-    canSeeAll = userIsPaid;
-
-    // ── BLOCKLIST (logged-in) ──────────────────────────────────────────────
-    // Check before credit deduction so blocked searches never consume credits.
-    // Admins bypass the blocklist entirely.
-    if (isBlockedUsername(sanitized) && !isAdmin) {
-      const cookieStore = await cookies();
-      const sid = cookieStore.get("ttp_anon_sid")?.value ?? null;
-      await prisma.searchLog.create({
-        data: { userId, sessionId: sid, searchedUsername: sanitized, postCount: -1, commentCount: -1 },
-      });
+    if (!user.redditUsername) {
       return NextResponse.json(
-        { error: "bad bad, dont search for admin good human", blocked: true },
+        {
+          error: "Connect your Reddit account to see your analytics.",
+          needsReddit: true,
+        },
         { status: 403 },
       );
     }
+
+    userId = user.id;
+    sanitized = user.redditUsername.replace(/[^a-zA-Z0-9_-]/g, "");
+    if (sanitized.length === 0 || sanitized.length > 50) {
+      return NextResponse.json(
+        { error: "Your linked Reddit username looks invalid. Reconnect it." },
+        { status: 400 },
+      );
+    }
+
+    const isAdmin = user.role === "admin";
+    const userIsPaid = user.isPaid || isAdmin;
+    canSeeAll = userIsPaid;
 
     if (userIsPaid) {
       creditsRemaining = -1; // unlimited
@@ -129,7 +121,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(
           {
             error:
-              "No search credits remaining. Upgrade to paid for unlimited searches.",
+              "No refreshes remaining. Upgrade to Pro for unlimited refreshes.",
             creditsRemaining: 0,
           },
           { status: 403 },
@@ -141,75 +133,13 @@ export async function GET(request: NextRequest) {
         data: { searchCredits: { decrement: 1 } },
       });
     }
-  } else {
-    // ── BLOCKLIST (anonymous) ──────────────────────────────────────────────
-    if (isBlockedUsername(sanitized)) {
-      const cookieStore = await cookies();
-      const sid = cookieStore.get("ttp_anon_sid")?.value ?? null;
-      await prisma.searchLog.create({
-        data: { userId: null, sessionId: sid, searchedUsername: sanitized, postCount: -1, commentCount: -1 },
-      });
-      return NextResponse.json(
-        { error: "bad bad, dont search for admin good human", blocked: true },
-        { status: 403 },
-      );
-    }
-
-    // Anonymous user — track by both session cookie AND IP address.
-    // This prevents bypassing the free limit via incognito or a different browser.
-    const sessionId = await getOrCreateSessionId();
-    const ANON_LIMIT = 1;
-
-    const [anonRecord, anonIpRecord] = await Promise.all([
-      prisma.anonCredit.findUnique({ where: { sessionId } }),
-      ip !== "unknown"
-        ? prisma.anonCredit.findFirst({
-            where: { ipAddress: ip, creditsUsed: { gte: ANON_LIMIT } },
-          })
-        : Promise.resolve(null),
-    ]);
-
-    const used = anonRecord?.creditsUsed ?? 0;
-
-    if (used >= ANON_LIMIT || anonIpRecord) {
-      return NextResponse.json(
-        {
-          error: "Free search used up. Sign up for 10 free credits!",
-          creditsRemaining: 0,
-        },
-        { status: 403 },
-      );
-    }
-
-    if (anonRecord) {
-      await prisma.anonCredit.update({
-        where: { sessionId },
-        data: {
-          creditsUsed: { increment: 1 },
-          // backfill IP if it was missing (e.g. record created before this change)
-          ...(anonRecord.ipAddress == null && ip !== "unknown"
-            ? { ipAddress: ip }
-            : {}),
-        },
-      });
-    } else {
-      await prisma.anonCredit.create({
-        data: {
-          sessionId,
-          creditsUsed: 1,
-          ipAddress: ip !== "unknown" ? ip : null,
-        },
-      });
-    }
-    creditsRemaining = ANON_LIMIT - used - 1;
-  }
   } catch (err) {
     console.error(
       "[search] auth/credits failed:",
       err instanceof Error ? err.message : err,
     );
     return NextResponse.json(
-      { error: "Could not start the search. Please try again." },
+      { error: "Could not load your analytics. Please try again." },
       { status: 500 },
     );
   }

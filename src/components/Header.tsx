@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useRecentSearches } from "@/lib/use-recent-searches";
 
 interface AuthUser {
   userId: string;
@@ -21,7 +20,6 @@ export default function Header() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const { recents, removeSearch, clearAll } = useRecentSearches();
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -177,61 +175,24 @@ export default function Header() {
 
                   <div className="nav-dropdown-divider" />
 
-                  {/* Recent searches */}
-                  <div className="nav-dropdown-recents">
-                    <div className="nav-dropdown-recents-header">
-                      <span className="nav-dropdown-recents-label">
-                        Recent Searches
-                      </span>
-                      {recents.length > 0 && (
-                        <button
-                          className="nav-dropdown-recents-clear"
-                          onClick={clearAll}
-                        >
-                          Clear all
-                        </button>
-                      )}
-                    </div>
-
-                    {recents.length === 0 ? (
-                      <p className="nav-dropdown-recents-empty">
-                        No recent searches yet
-                      </p>
-                    ) : (
-                      <ul className="nav-dropdown-recents-list">
-                        {recents.slice(0, 5).map((name) => (
-                          <li key={name} className="nav-dropdown-recents-item">
-                            <a
-                              href={`/search?username=${encodeURIComponent(name)}`}
-                              className="nav-dropdown-recents-name"
-                              onClick={() => setDropdownOpen(false)}
-                            >
-                              <ClockIcon />
-                              <span>{name}</span>
-                            </a>
-                            <button
-                              className="nav-dropdown-recents-remove"
-                              onClick={() => removeSearch(name)}
-                              aria-label={`Remove ${name}`}
-                            >
-                              <XIcon />
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-
-                  <div className="nav-dropdown-divider" />
-
                   <a
-                    href="/history"
+                    href="/search"
                     className="nav-dropdown-item"
                     role="menuitem"
                     onClick={() => setDropdownOpen(false)}
                   >
                     <HistoryIcon />
-                    History
+                    My analytics
+                  </a>
+
+                  <a
+                    href="/account"
+                    className="nav-dropdown-item"
+                    role="menuitem"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <UserIcon />
+                    Account
                   </a>
 
                   <button
@@ -283,11 +244,11 @@ function ChevronIcon({ open }: { open: boolean }) {
   );
 }
 
-function ClockIcon() {
+function UserIcon() {
   return (
     <svg
-      width="12"
-      height="12"
+      width="14"
+      height="14"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -295,29 +256,9 @@ function ClockIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      style={{ flexShrink: 0 }}
     >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
-
-function XIcon() {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
     </svg>
   );
 }

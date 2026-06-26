@@ -1,15 +1,12 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
-import SearchBar from "@/components/SearchBar";
 import ProfileCard from "@/components/ProfileCard";
 import RedditPostCard from "@/components/RedditPostCard";
 import RedditCommentCard from "@/components/RedditCommentCard";
 import Pagination from "@/components/Pagination";
 import { RedditPost, RedditComment } from "@/lib/reddit";
-import { isBlockedUsername } from "@/lib/blocked-usernames";
 
 interface RedditUserProfile {
   name: string;
@@ -181,7 +178,7 @@ function PaywallOverlay({ hiddenCount }: { hiddenCount: number }) {
         <p className="paywall-price">$3.99</p>
 
         <p className="paywall-copy">
-          Every post &amp; comment, unlimited searches,{" "}
+          Your full post &amp; comment history, unlimited refreshes,{" "}
           <span className="paywall-copy-em">one payment, forever.</span>
         </p>
 
@@ -213,15 +210,13 @@ function PaywallOverlay({ hiddenCount }: { hiddenCount: number }) {
 }
 
 function SearchContent() {
-  const searchParams = useSearchParams();
-  const username = searchParams.get("username") || "";
-  const isBlocked = isBlockedUsername(username);
-
   const [results, setResults] = useState<SearchResult | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Gate state: "auth" = not signed in, "reddit" = no Reddit account linked.
+  const [gate, setGate] = useState<"auth" | "reddit" | null>(null);
   const [activeTab, setActiveTab] = useState<"posts" | "comments">("posts");
-  const [stageIdx, setStageIdx] = useState(0);
   const [creditInfo, setCreditInfo] = useState<CreditInfo | null>(null);
   const [postsPage, setPostsPage] = useState(1);
   const [commentsPage, setCommentsPage] = useState(1);
@@ -230,40 +225,40 @@ function SearchContent() {
   useEffect(() => {
     fetch("/api/credits")
       .then((r) => r.json())
-      .then((data) => setCreditInfo(data))
+      .then((data) => {
+        setCreditInfo(data);
+        if (data?.redditUsername) setUsername(data.redditUsername);
+      })
       .catch(() => {});
   }, []);
 
+  // Load the signed-in user's OWN connected Reddit account. The API ignores
+  // any client input and always returns the account verified via OAuth.
   useEffect(() => {
-    if (!username) return;
-
     const controller = new AbortController();
-    let stageTimer: ReturnType<typeof setInterval> | null = null;
     let cancelled = false;
 
     async function fetchResults() {
       setLoading(true);
       setError(null);
+      setGate(null);
       setResults(null);
       setActiveTab("posts");
-      setStageIdx(0);
       setPostsPage(1);
       setCommentsPage(1);
 
-      // Abort after 90 seconds if search hangs
+      // Abort after 90 seconds if the fetch hangs
       const timeout = setTimeout(() => controller.abort(), 90_000);
 
       try {
-        const res = await fetch(
-          `/api/search?username=${encodeURIComponent(username)}`,
-          { signal: controller.signal },
-        );
+        const res = await fetch(`/api/search`, { signal: controller.signal });
 
-        // Parse the body defensively: a timed-out or crashed server can return
-        // an empty / non-JSON body, which would otherwise throw
-        // "Unexpected end of JSON input" when we call res.json().
+        // Parse defensively: a timed-out or crashed server can return an empty
+        // / non-JSON body, which would otherwise throw on res.json().
         const raw = await res.text();
-        let payload: (SearchResult & { error?: string }) | null = null;
+        let payload:
+          | (SearchResult & { error?: string; needsReddit?: boolean })
+          | null = null;
         if (raw) {
           try {
             payload = JSON.parse(raw);
@@ -273,27 +268,34 @@ function SearchContent() {
         }
 
         if (!res.ok) {
+          if (res.status === 401) {
+            if (!cancelled) setGate("auth");
+            return;
+          }
+          if (res.status === 403 && payload?.needsReddit) {
+            if (!cancelled) setGate("reddit");
+            return;
+          }
           if (payload?.error) throw new Error(payload.error);
           if (res.status === 429) {
             throw new Error(
-              "Too many searches. Please slow down and try again shortly.",
+              "Too many requests. Please slow down and try again shortly.",
             );
           }
           throw new Error(
-            "Search failed. The user may have too much activity — please try again.",
+            "Couldn't load your analytics — please try again.",
           );
         }
 
         if (!payload) {
-          throw new Error(
-            "Search returned no data. Please try again in a moment.",
-          );
+          throw new Error("No data returned. Please try again in a moment.");
         }
 
         const data: SearchResult = payload;
         if (!cancelled) {
           setResults(data);
-          // Refresh credits after search
+          setUsername(data.username);
+          // Refresh credits after load
           fetch("/api/credits")
             .then((r) => r.json())
             .then((d) => setCreditInfo(d))
@@ -303,7 +305,7 @@ function SearchContent() {
         if (!cancelled && err instanceof Error) {
           if (err.name === "AbortError") {
             setError(
-              "Search timed out. The user may have too much activity, please try again.",
+              "This timed out. Your account may have a lot of activity — please try again.",
             );
           } else {
             setError(err.message || "Something went wrong");
@@ -311,10 +313,7 @@ function SearchContent() {
         }
       } finally {
         clearTimeout(timeout);
-        if (!cancelled) {
-          setLoading(false);
-          if (stageTimer) clearInterval(stageTimer);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
@@ -323,9 +322,8 @@ function SearchContent() {
     return () => {
       cancelled = true;
       controller.abort();
-      if (stageTimer) clearInterval(stageTimer);
     };
-  }, [username, isBlocked]);
+  }, []);
 
   const canSeeAll = results?.canSeeAll ?? false;
 
@@ -363,9 +361,17 @@ function SearchContent() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
-      {/* Search bar at top */}
-      <div className="mb-3 flex justify-center">
-        <SearchBar initialValue={username} size="small" />
+      {/* Page heading */}
+      <div className="mb-4 text-center">
+        <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+          Your Reddit analytics
+        </h1>
+        {username && (
+          <p className="mt-1 text-sm text-zinc-500">
+            Connected account:{" "}
+            <span className="text-green-accent">u/{username}</span>
+          </p>
+        )}
       </div>
 
       {/* Credits indicator */}
@@ -386,7 +392,7 @@ function SearchContent() {
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              Unlimited Searches
+              Unlimited refreshes
             </span>
           ) : (
             <div className="text-center">
@@ -404,7 +410,7 @@ function SearchContent() {
                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                   />
                 </svg>
-                {creditInfo.credits} search
+                {creditInfo.credits} refresh
                 {creditInfo.credits !== 1 ? "es" : ""} remaining
               </span>
               {!creditInfo.isLoggedIn && (
@@ -423,41 +429,50 @@ function SearchContent() {
         </div>
       )}
 
-      {/* Blocked username */}
-      {isBlocked && (
-        <div className="flex flex-col items-center justify-center py-20">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-accent/10">
-            <svg
-              className="h-6 w-6 text-green-accent"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              />
-            </svg>
-          </div>
-          <p className="text-center text-lg font-semibold text-foreground">
-             bad bad, dont search for admin good human
+      {/* Not signed in */}
+      {gate === "auth" && (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="mb-2 text-lg font-semibold text-foreground">
+            Sign in to see your analytics
           </p>
+          <p className="mb-5 max-w-sm text-sm text-zinc-400">
+            redditprofile shows analytics for your own Reddit account. Sign in
+            to get started.
+          </p>
+          <Link
+            href="/signin?redirect=/search"
+            className="rounded-lg bg-green-accent px-5 py-2 text-sm font-bold text-white hover:bg-[#cc3700]"
+          >
+            Sign in
+          </Link>
+        </div>
+      )}
+
+      {/* Signed in but no Reddit account connected */}
+      {gate === "reddit" && (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="mb-2 text-lg font-semibold text-foreground">
+            Connect your Reddit account
+          </p>
+          <p className="mb-5 max-w-sm text-sm text-zinc-400">
+            Connect your Reddit account to see your karma breakdown, post and
+            comment history, and most-active communities — and export it all to
+            CSV.
+          </p>
+          <a
+            href="/api/auth/reddit"
+            className="rounded-lg bg-green-accent px-5 py-2 text-sm font-bold text-white hover:bg-[#cc3700]"
+          >
+            Connect Reddit
+          </a>
         </div>
       )}
 
       {/* Loading state, skeleton */}
-      {!isBlocked && loading && <SearchSkeleton username={username} />}
+      {!gate && loading && <SearchSkeleton username={username} />}
 
       {/* Error state */}
-      {!isBlocked && error && (
+      {!gate && error && (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-500/10">
             <svg

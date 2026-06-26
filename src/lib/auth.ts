@@ -78,6 +78,66 @@ export function getGoogleOAuthURL() {
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 }
 
+// ── Reddit OAuth ────────────────────────────────────────────────────────────
+// Used to verify a user owns the Reddit account they want to analyze. We only
+// request the "identity" scope (read the username of the authenticated user);
+// the app never reads or acts on behalf of the account beyond confirming it.
+function getRedditRedirectUri() {
+  return `${process.env.APP_URL || "http://localhost:3000"}/api/auth/reddit/callback`;
+}
+
+export function getRedditOAuthURL(state: string) {
+  const params = new URLSearchParams({
+    client_id: process.env.REDDIT_CLIENT_ID!,
+    response_type: "code",
+    state,
+    redirect_uri: getRedditRedirectUri(),
+    duration: "temporary",
+    scope: "identity",
+  });
+
+  return `https://www.reddit.com/api/v1/authorize?${params.toString()}`;
+}
+
+export async function exchangeRedditCode(code: string) {
+  const basic = Buffer.from(
+    `${process.env.REDDIT_CLIENT_ID}:${process.env.REDDIT_CLIENT_SECRET}`,
+  ).toString("base64");
+
+  const tokenRes = await fetch("https://www.reddit.com/api/v1/access_token", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${basic}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": "redditprofile/1.0",
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: getRedditRedirectUri(),
+    }),
+  });
+
+  if (!tokenRes.ok) {
+    throw new Error("Failed to exchange Reddit auth code");
+  }
+
+  const tokens = await tokenRes.json();
+
+  const meRes = await fetch("https://oauth.reddit.com/api/v1/me", {
+    headers: {
+      Authorization: `Bearer ${tokens.access_token}`,
+      "User-Agent": "redditprofile/1.0",
+    },
+  });
+
+  if (!meRes.ok) {
+    throw new Error("Failed to fetch Reddit identity");
+  }
+
+  return meRes.json() as Promise<{ id: string; name: string }>;
+}
+
 export async function exchangeGoogleCode(code: string) {
   const redirectUri = `${process.env.APP_URL || "http://localhost:3000"}/api/auth/google/callback`;
 

@@ -10,7 +10,7 @@ export async function GET() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.userId },
-    select: { avatarUrl: true },
+    select: { avatarUrl: true, redditUsername: true, isPaid: true },
   });
 
   return NextResponse.json({
@@ -20,6 +20,8 @@ export async function GET() {
       username: session.username,
       role: session.role,
       avatarUrl: user?.avatarUrl ?? null,
+      redditUsername: user?.redditUsername ?? null,
+      isPaid: user?.isPaid ?? false,
     },
   });
 }

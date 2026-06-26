@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing, redditprofile",
   description:
-    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $3.99 one-time, unlimited Reddit profile analysis.",
+    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $3.99 one-time — unlimited analytics and CSV export for your Reddit account.",
 };
 
 export default function PricingPage() {
@@ -37,9 +37,9 @@ export default function PricingPage() {
           </div>
           <ul className="mb-6 space-y-3">
             {[
-              "1 search without an account",
-              "10 searches with a free account",
-              "Preview of first 10 results per search",
+              "Connect your Reddit account",
+              "10 analytics refreshes",
+              "Preview of your 10 most recent posts & comments",
             ].map((f) => (
               <li
                 key={f}
@@ -84,8 +84,8 @@ export default function PricingPage() {
           </div>
           <ul className="mb-6 space-y-3">
             {[
-              "Unlimited searches",
-              "Full results, all posts & comments",
+              "Unlimited analytics refreshes",
+              "Your full post & comment history",
               "CSV export included",
               "Lifetime access, no subscription ever",
             ].map((f) => (
@@ -126,24 +126,24 @@ export default function PricingPage() {
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <IncludedFeature
-            title="Public Data Aggregation"
-            description="We aggregate public Reddit discussions, posts, and comments by topic or author into one organized research view."
+            title="Your Karma Breakdown"
+            description="Total, post, comment, and awardee karma for your own account, each shown separately."
           />
           <IncludedFeature
             title="Structured Dashboard"
-            description="Posts and comments are separated with subreddit context, scores, timestamps, and direct links."
+            description="Your posts and comments are separated with subreddit context, scores, timestamps, and direct links."
           />
           <IncludedFeature
             title="CSV Export"
-            description="Download your search results as a CSV file for offline analysis or reporting."
+            description="Download your own posts and comments as a CSV file to back up or archive your content."
           />
           <IncludedFeature
-            title="Search History"
-            description="Registered users can view their past searches and quickly revisit previous results."
+            title="Top Communities"
+            description="See the subreddits you post in most so you know where your Reddit time actually goes."
           />
           <IncludedFeature
             title="Instant Results"
-            description="Searches complete in seconds with data fetched live from publicly accessible sources."
+            description="Your dashboard loads in seconds, with data fetched live from Reddit's public API."
           />
           <IncludedFeature
             title="No Subscription"
@@ -159,8 +159,8 @@ export default function PricingPage() {
         </h2>
         <div className="mx-auto max-w-2xl space-y-6">
           <FaqItem
-            question="What Reddit data does redditprofile surface?"
-            answer="We only aggregate publicly available Reddit posts and comments. No private messages, deleted content, or non-public information is ever accessed."
+            question="Whose Reddit data does redditprofile show?"
+            answer="Only your own. You connect your Reddit account with Reddit's official sign-in, and the dashboard shows analytics for that account. No private messages or non-public data is ever accessed."
           />
           <FaqItem
             question="Is this a subscription?"
@@ -171,8 +171,8 @@ export default function PricingPage() {
             answer="Yes, we offer refunds within 7 days of purchase if you are not satisfied. See our refund policy for details."
           />
           <FaqItem
-            question="Do I need an account to search?"
-            answer="No. You can perform 1 search without an account. Creating a free account gives you 10 searches."
+            question="Do I need an account?"
+            answer="Yes. You sign in and connect your Reddit account so we can show your analytics. A free account includes 10 analytics refreshes."
           />
           <FaqItem
             question="What payment methods are accepted?"

@@ -23,7 +23,7 @@ export default function Footer() {
             />
           </a>
           <p className="footer-tagline">
-            A clear view of any public Reddit profile
+            Analytics &amp; backup for your own Reddit account
           </p>
         </div>
 

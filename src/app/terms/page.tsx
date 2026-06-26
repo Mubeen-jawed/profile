@@ -29,13 +29,17 @@ export default function TermsPage() {
 
         <Section title="2. Description of the Service">
           <p>
-            redditprofile is a web tool that displays public Reddit activity by
-            user. It aggregates posts and comments that are publicly visible on
-            Reddit into a structured view.
+            redditprofile is a personal analytics and data-export tool. After
+            you connect your own Reddit account using Reddit&apos;s official
+            OAuth sign-in, the Service displays analytics for that account —
+            your karma breakdown, your public posts and comments, your
+            most-active communities — and lets you export them to CSV.
           </p>
           <p>
-            The Service does not access private messages, deleted content, or
-            any data that requires authentication to view on Reddit.
+            The Service only analyzes the Reddit account you have connected and
+            verified as your own. It does not access private messages, deleted
+            content, or any data that requires authentication beyond confirming
+            your identity.
           </p>
         </Section>
 

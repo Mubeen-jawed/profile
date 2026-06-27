@@ -155,23 +155,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Anonymous user — track by both session cookie AND IP address.
-    // This prevents bypassing the free limit via incognito or a different browser.
+    // Anonymous user — gate the free search on the per-session cookie.
+    // NOTE: we intentionally do NOT block by IP. Public IPs are routinely
+    // shared (carrier/corporate NAT, shared Wi-Fi, and proxies/CDNs that
+    // forward a single upstream IP), so IP-based blocking falsely flags
+    // genuine first-time visitors as "out of credits". The IP is still
+    // stored on the record for analytics/abuse review.
     const sessionId = await getOrCreateSessionId();
     const ANON_LIMIT = 1;
 
-    const [anonRecord, anonIpRecord] = await Promise.all([
-      prisma.anonCredit.findUnique({ where: { sessionId } }),
-      ip !== "unknown"
-        ? prisma.anonCredit.findFirst({
-            where: { ipAddress: ip, creditsUsed: { gte: ANON_LIMIT } },
-          })
-        : Promise.resolve(null),
-    ]);
+    const anonRecord = await prisma.anonCredit.findUnique({
+      where: { sessionId },
+    });
 
     const used = anonRecord?.creditsUsed ?? 0;
 
-    if (used >= ANON_LIMIT || anonIpRecord) {
+    if (used >= ANON_LIMIT) {
       return NextResponse.json(
         {
           error: "Free search used up. Sign up for 10 free credits!",

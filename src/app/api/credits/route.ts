@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 
 const ANON_LIMIT = 1;
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const session = await getSession();
 
   if (session) {
@@ -21,29 +21,20 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // Anonymous — check both session cookie and IP
-  const ip =
-    request.headers.get("cf-connecting-ip") ||
-    request.headers.get("x-real-ip") ||
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    "unknown";
-
+  // Anonymous — gate on the per-session cookie only. IP-based blocking is
+  // intentionally avoided here because shared public IPs (carrier/corporate
+  // NAT, proxies/CDNs) falsely report first-time visitors as out of credits.
+  // Must mirror the gating logic in /api/search.
   const cookieStore = await cookies();
   const sid = cookieStore.get("ttp_anon_sid")?.value;
 
-  const [anonBySid, anonByIp] = await Promise.all([
-    sid ? prisma.anonCredit.findUnique({ where: { sessionId: sid } }) : Promise.resolve(null),
-    ip !== "unknown"
-      ? prisma.anonCredit.findFirst({
-          where: { ipAddress: ip, creditsUsed: { gte: ANON_LIMIT } },
-        })
-      : Promise.resolve(null),
-  ]);
+  const anonBySid = sid
+    ? await prisma.anonCredit.findUnique({ where: { sessionId: sid } })
+    : null;
 
   const usedBySession = anonBySid?.creditsUsed ?? 0;
-  const blockedByIp = anonByIp != null;
 
-  const credits = blockedByIp || usedBySession >= ANON_LIMIT ? 0 : ANON_LIMIT - usedBySession;
+  const credits = usedBySession >= ANON_LIMIT ? 0 : ANON_LIMIT - usedBySession;
 
   return NextResponse.json({ credits, isLoggedIn: false, isPaid: false });
 }

@@ -13,9 +13,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "redditprofile, Analytics & Backup for Your Reddit Account",
+  title: "redditprofile, Reddit Profile Intelligence",
   description:
-    "Connect your Reddit account to see your karma breakdown, post and comment history, and top communities — and export it all to CSV.",
+    "Instantly surface posts, comments, karma, and activity patterns for any Reddit user. Complete public profile analysis in seconds.",
   metadataBase: new URL(process.env.APP_URL || "https://redditprofile.com"),
   icons: {
     icon: [
@@ -29,15 +29,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "redditprofile",
-    title: "redditprofile, Analytics & Backup for Your Reddit Account",
+    title: "redditprofile, Reddit Profile Intelligence",
     description:
-      "See your karma, post and comment history, and top communities — and export them to CSV.",
+      "Surface the complete public history of any Reddit user in seconds.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "redditprofile, Analytics & Backup for Your Reddit Account",
+    title: "redditprofile, Reddit Profile Intelligence",
     description:
-      "Analytics and CSV backup for your own Reddit account.",
+      "Instantly analyze posts, comments, and karma for any Reddit user.",
   },
   robots: {
     index: true,

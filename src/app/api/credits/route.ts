@@ -18,8 +18,6 @@ export async function GET(request: NextRequest) {
       isLoggedIn: true,
       isPaid,
       role: user.role,
-      redditUsername: user.redditUsername ?? null,
-      redditConnected: Boolean(user.redditUsername),
     });
   }
 

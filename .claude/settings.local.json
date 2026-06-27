@@ -17,9 +17,7 @@
       "PowerShell(Copy-Item *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(npx tsc *)",
-      "WebFetch(domain:resumefordev.revenuelyft.com)",
-      "WebFetch(domain:leadverse.ai)"
+      "Bash(npx tsc *)"
     ]
   }
 }

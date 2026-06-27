@@ -38,36 +38,27 @@ export default function PrivacyPage() {
           </p>
 
           <h3 className="text-sm font-semibold text-foreground">
-            2.2 Reddit Account Connection
+            2.2 Usage Data
           </h3>
           <p>
-            When you connect your Reddit account using Reddit&apos;s OAuth
-            sign-in, we store your Reddit username and account ID so we can show
-            your analytics. We request read-only access to your identity only;
-            we do not post, vote, or take any action on your Reddit account.
+            We collect information about how you use the Service, including
+            search queries (Reddit usernames you look up), search timestamps,
+            and the number of results returned. This data is used to provide the
+            search history feature and to improve the Service.
           </p>
 
           <h3 className="text-sm font-semibold text-foreground">
-            2.3 Usage Data
-          </h3>
-          <p>
-            We collect information about how you use the Service, such as when
-            you refresh your analytics and the number of results returned. This
-            data is used to operate and improve the Service.
-          </p>
-
-          <h3 className="text-sm font-semibold text-foreground">
-            2.4 Payment Information
+            2.3 Payment Information
           </h3>
           <p>
             When you make a purchase, payment information such as credit card
-            numbers is processed by Polar (polar.sh), our Merchant of Record and
-            third-party payment processor. We do not store your full credit card
-            number or payment credentials on our servers.
+            numbers is processed by our third-party payment processor. We do not
+            store your full credit card number or payment credentials on our
+            servers.
           </p>
 
           <h3 className="text-sm font-semibold text-foreground">
-            2.5 Automatically Collected Data
+            2.4 Automatically Collected Data
           </h3>
           <p>
             We may automatically collect certain technical information including
@@ -91,11 +82,11 @@ export default function PrivacyPage() {
 
         <Section title="4. Data We Display">
           <p>
-            The Reddit data displayed in your dashboard, including your posts,
+            The Reddit data displayed through search results, including posts,
             comments, subreddits, scores, timestamps, and permalinks, is
-            publicly available information from your own connected Reddit
-            account. We display this data back to you but do not claim ownership
-            of it. We do not access, store, or display any private Reddit data.
+            publicly available information from Reddit. We aggregate and display
+            this public data but do not claim ownership of it. We do not access,
+            store, or display any private Reddit data.
           </p>
         </Section>
 
@@ -157,14 +148,8 @@ export default function PrivacyPage() {
               account authentication, subject to Google&apos;s Privacy Policy.
             </li>
             <li>
-              <strong className="text-zinc-300">Reddit OAuth:</strong> To verify
-              and connect your own Reddit account (read-only identity access),
-              subject to Reddit&apos;s Privacy Policy.
-            </li>
-            <li>
-              <strong className="text-zinc-300">Polar:</strong> Our Merchant of
-              Record and payment processor, used to complete purchases and
-              handle billing, subject to Polar&apos;s Privacy Policy.
+              <strong className="text-zinc-300">Payment Processor:</strong> For
+              processing payments, subject to their privacy policy.
             </li>
             <li>
               <strong className="text-zinc-300">Cloudflare:</strong> For

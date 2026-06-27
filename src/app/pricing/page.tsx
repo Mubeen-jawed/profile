@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing, redditprofile",
   description:
-    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $3.99 one-time — unlimited analytics and CSV export for your Reddit account.",
+    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $9 one-time, unlimited Reddit profile analysis.",
 };
 
 export default function PricingPage() {
@@ -37,9 +37,9 @@ export default function PricingPage() {
           </div>
           <ul className="mb-6 space-y-3">
             {[
-              "Connect your Reddit account",
-              "10 analytics refreshes",
-              "Preview of your 10 most recent posts & comments",
+              "1 search without an account",
+              "10 searches with a free account",
+              "Preview of first 10 results per search",
             ].map((f) => (
               <li
                 key={f}
@@ -79,13 +79,13 @@ export default function PricingPage() {
             Lifetime Pro
           </h2>
           <div className="mb-6">
-            <span className="text-3xl font-bold text-foreground">$3.99</span>
+            <span className="text-3xl font-bold text-foreground">$9</span>
             <span className="text-zinc-500"> one-time</span>
           </div>
           <ul className="mb-6 space-y-3">
             {[
-              "Unlimited analytics refreshes",
-              "Your full post & comment history",
+              "Unlimited searches",
+              "Full results, all posts & comments",
               "CSV export included",
               "Lifetime access, no subscription ever",
             ].map((f) => (
@@ -126,24 +126,24 @@ export default function PricingPage() {
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <IncludedFeature
-            title="Your Karma Breakdown"
-            description="Total, post, comment, and awardee karma for your own account, each shown separately."
+            title="Public Data Aggregation"
+            description="We aggregate public Reddit discussions, posts, and comments by topic or author into one organized research view."
           />
           <IncludedFeature
             title="Structured Dashboard"
-            description="Your posts and comments are separated with subreddit context, scores, timestamps, and direct links."
+            description="Posts and comments are separated with subreddit context, scores, timestamps, and direct links."
           />
           <IncludedFeature
             title="CSV Export"
-            description="Download your own posts and comments as a CSV file to back up or archive your content."
+            description="Download your search results as a CSV file for offline analysis or reporting."
           />
           <IncludedFeature
-            title="Top Communities"
-            description="See the subreddits you post in most so you know where your Reddit time actually goes."
+            title="Search History"
+            description="Registered users can view their past searches and quickly revisit previous results."
           />
           <IncludedFeature
             title="Instant Results"
-            description="Your dashboard loads in seconds, with data fetched live from Reddit's public API."
+            description="Searches complete in seconds with data fetched live from publicly accessible sources."
           />
           <IncludedFeature
             title="No Subscription"
@@ -159,35 +159,31 @@ export default function PricingPage() {
         </h2>
         <div className="mx-auto max-w-2xl space-y-6">
           <FaqItem
-            question="Whose Reddit data does redditprofile show?"
-            answer="Only your own. You connect your Reddit account with Reddit's official sign-in, and the dashboard shows analytics for that account. No private messages or non-public data is ever accessed."
+            question="What Reddit data does redditprofile surface?"
+            answer="We only aggregate publicly available Reddit posts and comments. No private messages, deleted content, or non-public information is ever accessed."
           />
           <FaqItem
             question="Is this a subscription?"
-            answer="No. The Lifetime Pro plan is a one-time payment of $3.99. You will never be billed again after purchase."
+            answer="No. The Lifetime Pro plan is a one-time payment of $9. You will never be billed again after purchase."
           />
           <FaqItem
             question="Can I get a refund?"
             answer="Yes, we offer refunds within 7 days of purchase if you are not satisfied. See our refund policy for details."
           />
           <FaqItem
-            question="Do I need an account?"
-            answer="Yes. You sign in and connect your Reddit account so we can show your analytics. A free account includes 10 analytics refreshes."
+            question="Do I need an account to search?"
+            answer="No. You can perform 1 search without an account. Creating a free account gives you 10 searches."
           />
           <FaqItem
             question="What payment methods are accepted?"
-            answer="We accept all major credit and debit cards and other methods supported by our payment provider. Payments are processed securely by Polar, our Merchant of Record."
-          />
-          <FaqItem
-            question="Who processes my payment?"
-            answer="All purchases are processed by Polar (polar.sh), which acts as the Merchant of Record. Polar handles billing and any applicable sales tax or VAT, and the charge appears on your statement under our Polar descriptor."
+            answer="We accept all major credit and debit cards, PayPal, and other payment methods through our secure payment processor."
           />
         </div>
       </div>
 
       <p className="mt-12 text-center text-sm text-zinc-500">
         Questions?{" "}
-        <Link href="/contact" className="text-green-accent hover:underline">
+        <Link href="/#contact" className="text-green-accent hover:underline">
           Contact us
         </Link>{" "}
         , we&apos;re happy to help.

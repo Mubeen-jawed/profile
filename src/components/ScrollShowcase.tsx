@@ -13,26 +13,26 @@ const slides: Slide[] = [
   {
     number: 300,
     suffix: "K+",
-    label: "Accounts analyzed",
-    sublabel: "Reddit accounts measured and backed up by their owners",
+    label: "Profile lookups completed",
+    sublabel: "Public Reddit profiles fully analyzed across active communities",
   },
   {
     number: 8,
     suffix: "M+",
-    label: "Posts and comments organized",
-    sublabel: "A complete, structured snapshot of your own activity",
+    label: "Posts and comments indexed",
+    sublabel: "Fast aggregation for a complete profile activity snapshot",
   },
   {
     number: 5,
     suffix: "x",
-    label: "Faster than scrolling your profile",
-    sublabel: "Compared to paging through your history on Reddit by hand",
+    label: "Faster than manual research",
+    sublabel: "Compared to manually browsing Reddit threads one by one",
   },
   {
     number: 24,
     suffix: "/7",
-    label: "Always-on dashboard",
-    sublabel: "Refresh your analytics any time and get results instantly",
+    label: "Always-on profile tool",
+    sublabel: "Run profile checks any time and get results instantly",
   },
 ];
 
@@ -169,7 +169,7 @@ export default function ScrollShowcase() {
         />
 
         <p className="absolute top-12 text-[11px] font-bold tracking-[2.8px] text-white/25 sm:text-xs">
-          redditprofile · YOUR REDDIT ANALYTICS
+          redditprofile · REDDIT INTELLIGENCE
         </p>
 
         <div className="relative flex h-[220px] w-full items-center justify-center">

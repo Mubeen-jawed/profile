@@ -16,8 +16,6 @@ model User {
   username      String      @unique
   password      String      @default("")
   googleId      String?     @unique
-  redditId      String?     @unique
-  redditUsername String?
   avatarUrl     String?
   role          String      @default("user") // "user", "admin"
   isPaid        Boolean     @default(false)

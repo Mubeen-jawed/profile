@@ -29,17 +29,13 @@ export default function TermsPage() {
 
         <Section title="2. Description of the Service">
           <p>
-            redditprofile is a personal analytics and data-export tool. After
-            you connect your own Reddit account using Reddit&apos;s official
-            OAuth sign-in, the Service displays analytics for that account —
-            your karma breakdown, your public posts and comments, your
-            most-active communities — and lets you export them to CSV.
+            redditprofile is a web tool that displays public Reddit activity by
+            user. It aggregates posts and comments that are publicly visible on
+            Reddit into a structured view.
           </p>
           <p>
-            The Service only analyzes the Reddit account you have connected and
-            verified as your own. It does not access private messages, deleted
-            content, or any data that requires authentication beyond confirming
-            your identity.
+            The Service does not access private messages, deleted content, or
+            any data that requires authentication to view on Reddit.
           </p>
         </Section>
 
@@ -90,18 +86,15 @@ export default function TermsPage() {
         <Section title="5. Payments and Billing">
           <p>
             redditprofile offers a free tier with limited searches and a paid
-            Lifetime Pro plan for a one-time payment of $3.99 (USD). The Lifetime
+            Lifetime Pro plan for a one-time payment of $9 (USD). The Lifetime
             Pro plan grants unlimited access to full search results with no
             recurring charges.
           </p>
           <p>
-            Payments are processed by Polar (polar.sh), which acts as the
-            Merchant of Record for all purchases. Polar handles payment
-            processing, billing, and any applicable sales tax or VAT on our
-            behalf, and the charge will appear on your statement under our Polar
-            descriptor. By making a purchase, you also agree to Polar&apos;s
-            terms and conditions. Prices are subject to change, but changes do
-            not affect previously completed purchases.
+            Payments are processed by our third-party payment processor. By
+            making a purchase, you agree to that processor&apos;s terms and
+            conditions. Prices are subject to change, but changes do not affect
+            previously completed purchases.
           </p>
         </Section>
 

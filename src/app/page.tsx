@@ -1,3 +1,4 @@
+import LandingSearchForm from "@/components/LandingSearchForm";
 import useCases1 from "../../public/use-cases-1.png";
 // import useCases2 from "../../public/use-cases-2.png";
 // import useCases3 from "../../public/use-cases-3.png";
@@ -11,31 +12,16 @@ export default function Home() {
         <div className="hero-glow2" aria-hidden="true" />
 
         <h1>
-          Your Reddit,
+          Discover any
           <br />
-          <span className="gr">measured &amp; backed up</span>
+          <span className="gr">Reddit Profile</span>
         </h1>
 
         <p className="sub">
-          Connect your account to see your karma breakdown, full post &amp;
-          comment history, and most-active communities — and export it all to
-          CSV.
+          Search Your Next Prospect, Friend or Potential Partner in seconds.
         </p>
 
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href="/search"
-            className="rounded-lg bg-green-accent px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#cc3700]"
-          >
-            See my analytics
-          </a>
-          <a
-            href="/pricing"
-            className="rounded-lg border border-card-border bg-card-bg px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-green-accent/30"
-          >
-            View pricing
-          </a>
-        </div>
+        <LandingSearchForm />
 
         {/* <div className="promo-banner mt-6">
           <svg
@@ -58,10 +44,10 @@ export default function Home() {
       {/* ── Features ── */}
       <div className="section-divider" />
       <section id="features" className="landing-section features-section">
-        <h2 className="section-heading">Everything about your account, in one place</h2>
+        <h2 className="section-heading">Know anyone on Reddit in seconds</h2>
         <p className="section-subtext">
-          Connect your account and see your karma breakdown, full post and
-          comment history, and account details — all in a clean dashboard.
+          Type a username and see their karma breakdown, post history, and
+          account details, all from public Reddit data.
         </p>
 
         <div className="features-bento">
@@ -89,7 +75,7 @@ export default function Home() {
             <h3 className="feat-name">All 4 karma types, broken down</h3>
             <p className="feat-text">
               Total karma, post karma, comment karma, and awardee karma, each
-              shown separately so you can see exactly where your score comes
+              shown separately so you can see exactly where their score comes
               from.
             </p>
             <div className="feat-tracks" aria-hidden="true">
@@ -142,9 +128,9 @@ export default function Home() {
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
             </div>
-            <h3 className="feat-name">Your posts and comments, both</h3>
+            <h3 className="feat-name">Posts and comments, both</h3>
             <p className="feat-text">
-              Switch between your post history and comment history in one view.
+              Switch between their post history and comment history in one view.
               See the subreddit, score, and date for each entry.
             </p>
           </div>
@@ -171,10 +157,10 @@ export default function Home() {
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
             </div>
-            <h3 className="feat-name">Account age &amp; milestones</h3>
+            <h3 className="feat-name">Account age at a glance</h3>
             <p className="feat-text">
-              See when your account was created, how old it is, and how many
-              followers you have — your Reddit timeline at a glance.
+              See when the account was created, how old it is, and how many
+              followers it has, useful for spotting brand-new accounts.
             </p>
           </div>
 
@@ -198,10 +184,9 @@ export default function Home() {
                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
               </svg>
             </div>
-            <h3 className="feat-name">Export your history to CSV</h3>
+            <h3 className="feat-name">Share any search with a link</h3>
             <p className="feat-text">
-              Download your full posts and comments as a CSV — back up your
-              content or migrate it before you edit or delete.
+              Every search has its own URL. Send it to anyone, no setup needed.
             </p>
           </div>
         </div>
@@ -234,39 +219,42 @@ export default function Home() {
           </svg>
         </div>
         <h2 className="section-heading">
-          Why people <span className="uc-accent">track their own Reddit</span>
+          Real reasons <span className="uc-accent">people search</span>
         </h2>
         <p className="section-subtext">
-          A few common reasons people connect their account,{" "}
-          <strong className="uc-subtext-em">and keep coming back.</strong>
+          You don&apos;t always know who you&apos;re dealing with. Here&apos;s
+          where a quick lookup{" "}
+          <strong className="uc-subtext-em">changes everything.</strong>
         </p>
 
         <div className="uc-steps-grid">
           {/* Step 1 */}
           <div className="uc-step-card">
-            {/* <img src={useCases1} alt="Track your Reddit karma over time" /> */}
+            {/* <img src={useCases1} alt="Know who you're dealing with" /> */}
             <div className="uc-step-content">
               <h3 className="uc-step-title">
-                Track your karma and growth
+                Know exactly who you&apos;re dealing with
               </h3>
               <p className="uc-step-desc">
-                See your karma broken down by type and watch how your account
-                grows — your full Reddit footprint in one clean dashboard.
+                Before you hire, date, or buy, pull up their Reddit. Account
+                age, karma history, and posting patterns tell you whether
+                someone&apos;s story holds water.
               </p>
             </div>
           </div>
 
           {/* Step 2 */}
           <div className="uc-step-card">
-            {/* <img src={useCases2} alt="Back up your Reddit content to CSV" /> */}
+            {/* <img src={useCases2} alt="Spot red flags with account analysis" /> */}
             <div className="uc-step-content">
               <h3 className="uc-step-title">
-                Back up your content before you delete
+                Spot red flags before it&apos;s too late
               </h3>
               <p className="uc-step-desc">
-                Editing your history or leaving an account behind? Export your
-                posts and comments to CSV first so you keep a copy of everything
-                you&apos;ve written.
+                Brand new account. Zero karma. Too-good-to-be-true offer.
+                Surfaces the patterns scammers can&apos;t fake, account age,
+                activity, and behavior across every subreddit they&apos;ve
+                touched.
               </p>
             </div>
           </div>
@@ -275,13 +263,14 @@ export default function Home() {
           <div className="uc-step-card">
             {/* <img
               src={useCases3}
-              alt="See your most-active subreddits"
+              alt="See who they really are across subreddits"
             /> */}
             <div className="uc-step-content">
-              <h3 className="uc-step-title">See your top communities</h3>
+              <h3 className="uc-step-title">See who they really are</h3>
               <p className="uc-step-desc">
-                Find the subreddits you post in most and the topics you engage
-                with — a clear picture of where your Reddit time actually goes.
+                What someone posts when no one&apos;s watching says everything.
+                See their communities, passions, and opinions, and form a real
+                picture before your first conversation.
               </p>
             </div>
           </div>
@@ -306,13 +295,13 @@ export default function Home() {
             <div className="price-cadence">forever, no card required</div>
             <ul className="price-features">
               {[
-                { text: "Connect your Reddit account", on: true },
-                { text: "Your karma & account stats", on: true },
+                { text: "Full Reddit profile data", on: true },
                 { text: "Last 7 recent posts and comments", on: true },
-                { text: "10 analytics refreshes", on: true },
-                { text: "Full history (all posts & comments)", on: false },
-                { text: "CSV export", on: false },
-                { text: "Unlimited refreshes", on: false },
+                { text: "Shareable search links", on: true },
+                { text: "10 Credits for free", on: true },
+                { text: "Search history", on: true },
+                { text: "CSV Export", on: false },
+                { text: "Unlimited Credits", on: false },
               ].map((f) => (
                 <li
                   key={f.text}
@@ -355,8 +344,8 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <a href="/search" className="price-cta price-cta-free">
-              Start free
+            <a href="#search" className="price-cta price-cta-free">
+              Start Searching, Free
             </a>
           </div>
 
@@ -366,7 +355,7 @@ export default function Home() {
             </div>
             <div className="price-tier">Pro</div>
             <div className="price-amount">
-              <sup>$</sup>3.99
+              <sup>$</sup>9
             </div>
             <div className="price-cadence">
               one-time payment, lifetime access
@@ -374,8 +363,8 @@ export default function Home() {
             <ul className="price-features">
               {[
                 "Everything in Free",
-                "Unlimited analytics refreshes",
-                "Your full post & comment history",
+                "Unlimited search credits",
+                "All posts and comments",
                 "CSV export",
                 "Early access to new features",
                 "Priority support",

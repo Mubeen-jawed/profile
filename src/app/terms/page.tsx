@@ -86,9 +86,9 @@ export default function TermsPage() {
         <Section title="5. Payments and Billing">
           <p>
             redditprofile offers a free tier with limited searches and a paid
-            Lifetime Pro plan for a one-time payment of $9 (USD). The Lifetime
-            Pro plan grants unlimited access to full search results with no
-            recurring charges.
+            Lifetime Pro plan for a one-time payment of $3.99 (USD). The
+            Lifetime Pro plan grants unlimited access to full search results
+            with no recurring charges.
           </p>
           <p>
             Payments are processed by our third-party payment processor. By

@@ -355,7 +355,7 @@ export default function Home() {
             </div>
             <div className="price-tier">Pro</div>
             <div className="price-amount">
-              <sup>$</sup>9
+              <sup>$</sup>3.99
             </div>
             <div className="price-cadence">
               one-time payment, lifetime access

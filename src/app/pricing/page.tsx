@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing, redditprofile",
   description:
-    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $9 one-time, unlimited Reddit profile analysis.",
+    "Simple, transparent pricing. Start free or upgrade to Lifetime Pro for $3.99 one-time, unlimited Reddit profile analysis.",
 };
 
 export default function PricingPage() {
@@ -21,8 +21,18 @@ export default function PricingPage() {
 
       <div className="mb-8 flex justify-center">
         <div className="promo-banner">
-          <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="h-3.5 w-3.5 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           One-time payment &amp; lifetime access — first 30 users only
         </div>
@@ -79,7 +89,7 @@ export default function PricingPage() {
             Lifetime Pro
           </h2>
           <div className="mb-6">
-            <span className="text-3xl font-bold text-foreground">$9</span>
+            <span className="text-3xl font-bold text-foreground">$3.99</span>
             <span className="text-zinc-500"> one-time</span>
           </div>
           <ul className="mb-6 space-y-3">
@@ -164,7 +174,7 @@ export default function PricingPage() {
           />
           <FaqItem
             question="Is this a subscription?"
-            answer="No. The Lifetime Pro plan is a one-time payment of $9. You will never be billed again after purchase."
+            answer="No. The Lifetime Pro plan is a one-time payment of $3.99. You will never be billed again after purchase."
           />
           <FaqItem
             question="Can I get a refund?"
